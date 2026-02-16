@@ -9,7 +9,7 @@ scale = 50;
 %% 1. Run draw.m and draw the required trajectory
 
 run('draw(scale)');
-uiwait(gcf); 
+uiwait(gcf);  % wait until figure is closed
 
 %% 2. Run mazeGUI.m to see the trajectory on the Maze
 

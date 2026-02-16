@@ -11,8 +11,8 @@ function mazeGUI(scale)
     wallPlot = wallHi.';
 
     % Boundaries
-    B = bwboundaries(wallPlot, 4);
-    wallsXY = boundariesToXY(B);
+    B = bwboundaries(wallPlot, 4);  % store visual boundaries
+    wallsXY = boundariesToXY(B); % create visual boundaries
 
     % Plot
     figure('Color','k'); ax = axes; hold(ax,'on');

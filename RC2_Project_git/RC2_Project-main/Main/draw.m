@@ -12,7 +12,7 @@ function traj = draw(scale)
     imagesc(ax, [0 Hh], [0 Wh], wallPlot);
     set(ax,'YDir','normal');
     colormap(ax, gray(2));
-    caxis(ax,[0 1]);
+    clim(ax,[0 1]);
 
     axis(ax,'equal');
     xlim(ax,[0 Hh]); ylim(ax,[0 Wh]);
@@ -49,7 +49,7 @@ function traj = draw(scale)
     t = [0; cumsum(d)];
     t = t / t(end);
 
-    traj.xy = xy;
+    traj.xy = xy; 
     traj.t  = t;
 
     save('trajectory.mat','traj');

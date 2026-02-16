@@ -31,7 +31,7 @@ function replay_q_timeseries_on_maze()
     imagesc(ax, [0 Hh], [0 Wh], double(wallPlot));
     set(ax,'YDir','normal');
     colormap(ax, gray(2));
-    caxis(ax,[0 1]);
+    clim(ax,[0 1]);
     axis(ax,'equal'); axis(ax,'off');
 
     xlim(ax,[xmin xmax]);
@@ -49,7 +49,8 @@ function replay_q_timeseries_on_maze()
     drawnow;
 
     N = numel(x);
-    for k = k0:N
+    timesteps = 5;
+    for k = k0:timesteps:N
         if ~ishandle(fig), return; end
 
         if bad(k)
@@ -62,6 +63,6 @@ function replay_q_timeseries_on_maze()
                       'UData', velScale*vx(k), 'VData', velScale*vy(k));
         end
 
-        drawnow limitrate nocallbacks;
+        drawnow limitrate;
     end
 end
