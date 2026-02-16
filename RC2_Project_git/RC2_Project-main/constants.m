@@ -1,10 +1,6 @@
 
 %% Regulation controller
 
-k1 = 0.1;
-k2 = 0.1;
-k3= 0.1;
-
 k_v = 0.1;
 k_w = 0.1;
 k_delta = 0.1;
@@ -18,5 +14,4 @@ xi = 0.6;
 
 b = 5;
 xi = 0.6;
-
 
