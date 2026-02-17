@@ -12,9 +12,12 @@ y_box     = 880;
 theta_box = 0;
 
 %% Gains for posture regulation
-k1 = 0.22;    
-k2 = 1.0;     
-k3 = 0.4;
+%k1 = 0.22;    
+%k2 = 1.0;     
+%k3 = 0.4;
+k1 = 1.5;
+k2 = 4;
+k3 = 1.5;
 
 %% Simulation Variables
 %shift_time = 3;  % trajectory tracking time (before regulation)
