@@ -3,8 +3,8 @@ a = 3;  % >0
 xi = 0.6;  % (0,1)
 
 %% Non linear Trajectory Tracking Controller constants
-b = 5;  % >0
-xi = 0.6;  % (0,1)
+b = 500;  % >0
+xi = 0.7;  % (0,1)
 
 %% Parking box pose
 x_box     = 850;
@@ -29,8 +29,8 @@ y0 = S.traj.xy(1,2);
 theta0 = pi/4;
 
 % last (x,y) to be tracked
-last_traj = S.traj.xy(end,:);
-assignin('base','last_traj', last_traj);
+last_t = 5;
+%assignin('base','last_t', last_t);
 
 xy = S.traj.xy;               % [N x 2]
 t  = S.traj.t;                % [N x 1] [belongs to (0,1)]

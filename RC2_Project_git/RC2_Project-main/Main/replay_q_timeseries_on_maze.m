@@ -2,6 +2,7 @@ function replay_q_timeseries_on_maze()
     q       = evalin('base','q');
     qdot    = evalin('base','qdot');
     wallPlot= evalin('base','wallPlot');
+    xy = evalin('base', 'scenario');
     Hh      = evalin('base','Hh');
     Wh      = evalin('base','Wh');
 
@@ -29,6 +30,7 @@ function replay_q_timeseries_on_maze()
     ax  = axes(fig); hold(ax,'on');
 
     imagesc(ax, [0 Hh], [0 Wh], double(wallPlot));
+    %plot(ax, xy(:,1), xy(:,2), 'r-', 'LineWidth', 2);
     set(ax,'YDir','normal');
     colormap(ax, gray(2));
     clim(ax,[0 1]);
