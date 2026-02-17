@@ -28,12 +28,12 @@ x0 = S.traj.xy(1,1);
 y0 = S.traj.xy(1,2);
 theta0 = pi/4;
 
-% last (x,y) to be tracked
-last_t = 5;
-%assignin('base','last_t', last_t);
-
 xy = S.traj.xy;               % [N x 2]
 t  = S.traj.t;                % [N x 1] [belongs to (0,1)]
+
+% last (x,y) to be tracked
+last_t = size(xy, 1)-1;
+%assignin('base','last_t', last_t);
 
 %Tfinal = shift_time;           % seconds
 %t = t * Tfinal;
