@@ -15,9 +15,9 @@ theta_box = 0;
 %k1 = 0.22;    
 %k2 = 1.0;     
 %k3 = 0.4;
-k1 = 1.5;
-k2 = 4;
-k3 = 1.5;
+k1 = 3;
+k2 = 1.5;
+k3 = 2;
 
 %% Simulation Variables
 %shift_time = 3;  % trajectory tracking time (before regulation)
