@@ -1,5 +1,5 @@
-kv_test = 0.5 : 1 : 3;
-kw_test = 1.0 : 1 : 5;
+kv_test = 0.5 : 0.5 : 3;
+kw_test = 1.0 : 0.5 : 5;
 kd_test = 0.2 : 0.4 : 2;
 
 best_cost = inf;

@@ -1,9 +1,9 @@
 %% Linear Trajectory Tracking Controller constants
 a = 3;  % >0
-xi = 0.6;  % (0,1)
+xi = 0.7;  % (0,1)
 
 %% Non linear Trajectory Tracking Controller constants
-b = 500;  % >0
+b = 2;  % >0
 xi = 0.7;  % (0,1)
 
 %% Parking box pose
@@ -22,7 +22,7 @@ k3 = best_gains(3);
 
 %% Simulation Variables
 %shift_time = 3;  % trajectory tracking time (before regulation)
-stop_time = 30;
+stop_time = 15;
 
 %% desired trajectory generation
 S = load('trajectory.mat');   % contains S.traj.xy and S.traj.t

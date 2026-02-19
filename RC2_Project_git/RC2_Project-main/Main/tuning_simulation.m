@@ -5,16 +5,16 @@ xi = 0.71;  % (0,1)
 
 %% Non linear Trajectory Tracking Controller constants
 
-b = 500;  % >0
+b = 5;  % >0
 xi = 0.71;  % (0,1)
 
 %% Simulation Variables
 
 %shift_time = 3;  % trajectory tracking time (before regulation)
-stop_time = 400;
+stop_time = 50;
 
 scale = 15;
-type = 'square';
+type = 'circle';
 
 run('draw_scenarios(scale, type)');
 uiwait(gcf);  % wait until figure is closed
@@ -25,7 +25,7 @@ S = load('trajectory.mat');   % contains S.traj.xy and S.traj.t
 % unicycle initial conditions
 x0 = S.traj.xy(1,1);
 y0 = S.traj.xy(1,2);
-theta0 = pi/4;
+theta0 = -pi/2;
 
 xy = S.traj.xy;               % [N x 2]
 t  = S.traj.t;                % [N x 1] [belongs to (0,1)]

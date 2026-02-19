@@ -21,7 +21,7 @@ uiwait(gcf);
 run('simulation.m');
 
 %% 4. Run Simulink Program and save results
-model = 'NL_Trajectory_Tracking_and_Regularization_2024a';
+model = "NL_Trajectory_Tracking_and_Regularization_2024b";
 
 load_system(model);
 
