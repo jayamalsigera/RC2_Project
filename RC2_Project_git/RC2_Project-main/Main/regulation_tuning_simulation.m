@@ -42,4 +42,4 @@ for kv = kv_test
 
 end
 
-fprintf('Migliori guadagni: kv=%.2f, kw=%.2f, kd=%.2f\n', best_gains);
+fprintf('Best Gains: kv=%.2f, kw=%.2f, kd=%.2f\n', best_gains);
