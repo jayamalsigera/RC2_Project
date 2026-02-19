@@ -6,7 +6,7 @@ best_cost = inf;
 best_gains = [0, 0, 0];
 
 x_box = 0; y_box = 0; theta_box = 0;
-x0 = -0.8; y0 = 0.5; theta = pi/4;
+x0 = -0.8; y0 = 0.5; theta0 = pi/4;
 assignin('base', 'x0', x0);
 assignin('base', 'y0', y0);
 assignin('base', 'theta0', theta0);
