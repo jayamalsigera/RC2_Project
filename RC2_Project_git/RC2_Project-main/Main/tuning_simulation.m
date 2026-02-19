@@ -1,12 +1,15 @@
 %% Linear Trajectory Tracking Controller constants
+
 a = 5;  % >0
 xi = 0.71;  % (0,1)
 
 %% Non linear Trajectory Tracking Controller constants
+
 b = 500;  % >0
 xi = 0.71;  % (0,1)
 
 %% Simulation Variables
+
 %shift_time = 3;  % trajectory tracking time (before regulation)
 stop_time = 400;
 
@@ -15,8 +18,6 @@ type = 'square';
 
 run('draw_scenarios(scale, type)');
 uiwait(gcf);  % wait until figure is closed
-
-
 
 %% desired trajectory generation
 S = load('trajectory.mat');   % contains S.traj.xy and S.traj.t
@@ -37,6 +38,7 @@ ref = timeseries(xy);      % ref.Data is Nx2: [x_d y_d]
 assignin('base','ref', ref);
 
 %% 4. Run Simulink Program and save results
+
 model = 'L_tuning_2024b';
 
 load_system(model);
