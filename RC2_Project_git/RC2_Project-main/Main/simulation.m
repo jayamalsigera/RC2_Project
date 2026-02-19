@@ -1,10 +1,10 @@
 %% Linear Trajectory Tracking Controller constants
 a = 3;  % >0
-xi = 0.7;  % (0,1)
+l_xi = 0.7;  % (0,1)
 
 %% Non linear Trajectory Tracking Controller constants
 b = 2;  % >0
-xi = 0.7;  % (0,1)
+nl_xi = 0.7;  % (0,1)
 
 %% Parking box pose
 x_box     = 850;
@@ -19,6 +19,8 @@ theta_box = 0;
 k1 = best_gains(1);
 k2 = best_gains(2);
 k3 = best_gains(3);
+
+
 
 %% Simulation Variables
 %shift_time = 3;  % trajectory tracking time (before regulation)

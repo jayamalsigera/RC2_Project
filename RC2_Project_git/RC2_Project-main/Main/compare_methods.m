@@ -22,7 +22,7 @@ run('simulation.m');
 
 %% 4. Run First Simulink Program and save results
 model1 = "L_Trajectory_Tracking_and_Regulation_2024b";
-
+xi = l_xi;
 load_system(model1);
 
 set_param(model1, 'StopTime', num2str(stop_time));
@@ -32,7 +32,7 @@ run('replay_q_timeseries_on_maze.m');
 %% 4. Run Second Simulink Program and save results
 
 model2 = "NL_Trajectory_Tracking_and_Regularization_2024b";
-
+xi = nl_xi;
 load_system(model2);
 
 set_param(model2, 'StopTime', num2str(stop_time));
@@ -42,7 +42,7 @@ run('replay_q_timeseries_on_maze.m');
 %% 4. Run Third Simulink Program and save results
 
 model3 = "NL_Trajectory_Tracking_and_Posture_Regulation2_2024b";
-
+xi = nl_xi;
 load_system(model3);
 
 set_param(model3, 'StopTime', num2str(stop_time));
