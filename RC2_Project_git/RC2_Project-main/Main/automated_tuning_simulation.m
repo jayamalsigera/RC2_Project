@@ -3,8 +3,8 @@ model = 'L_tuning_2024b';
 load_system(model);
 
 % 1. Definisci la griglia dei parametri da esplorare
-A_test = 1 : 1 : 15;          % Testa 'a' da 1 a 10
-XI_test = 0.4 : 0.1 : 1;    % Testa lo smorzamento 'xi' da 0.4 a 1.2
+A_test = 69 : 1 : 80;          % Testa 'a' da 1 a 10
+XI_test = 0.2 : 0.1 : 0.8;    % Testa lo smorzamento 'xi' da 0.4 a 1
 
 best_cost = inf;
 best_params = [0, 0];
@@ -13,7 +13,7 @@ best_params = [0, 0];
 cost_matrix = zeros(length(A_test), length(XI_test));
 
 scale = 15;
-type = 'circle';
+type = 'square';
 run('draw_scenarios(scale, type)');
 uiwait(gcf);  % wait until figure is closed
 
@@ -25,7 +25,6 @@ y0 = S.traj.xy(1,2);
 theta0 = -pi/2;
         
 xy = S.traj.xy;               % [N x 2]
-t  = S.traj.t;                % [N x 1] [belongs to (0,1)]
         
 ref = timeseries(xy);      % ref.Data is Nx2: [x_d y_d] 
 assignin('base','ref', ref);
@@ -42,7 +41,7 @@ for i = 1:length(A_test)
         assignin('base', 'xi', xi);
         
         % Esegui la simulazione 
-        simOut = sim(model, 'StopTime', '10');
+        simOut = sim(model, 'StopTime', '400');
                
         e1 = simOut.e_x.Data;
         e2 = simOut.e_y.Data;

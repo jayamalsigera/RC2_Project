@@ -1,8 +1,6 @@
 %% 4. Automated Tuning (Grid Search)
 model = 'L_tuning_2024b';
 load_system(model);
-stop_time = 10;
-set_param(model, 'StopTime', num2str(stop_time));
 
 % 1. Definisci la griglia dei parametri da esplorare
 A_test = 1 : 1 : 10;          % Testa 'a' da 1 a 10
@@ -14,23 +12,22 @@ best_params = [0, 0];
 % Matrice per salvare i risultati (utile per fare grafici 3D per la presentazione)
 cost_matrix = zeros(length(A_test), length(XI_test));
 
- scale = 15;
- type = 'circle';
- run('draw_scenarios(scale, type)');
- uiwait(gcf);  % wait until figure is closed
+scale = 15;
+type = 'square';
+run('draw_scenarios(scale, type)');
+uiwait(gcf);  % wait until figure is closed
+
+S = load('trajectory.mat');   % contains S.traj.xy and S.traj.t
         
- %% desired trajectory generation
- S = load('trajectory.mat');   % contains S.traj.xy and S.traj.t
+% unicycle initial conditions
+x0 = S.traj.xy(1,1);
+y0 = S.traj.xy(1,2);
+theta0 = -pi/2;
         
- % unicycle initial conditions
- x0 = S.traj.xy(1,1);
- y0 = S.traj.xy(1,2);
- theta0 = -pi/2;
+xy = S.traj.xy;               % [N x 2]
+t  = S.traj.t;                % [N x 1] [belongs to (0,1)]
         
- xy = S.traj.xy;               % [N x 2]
-        t  = S.traj.t;                % [N x 1] [belongs to (0,1)]
-        
-        ref = timeseries(xy);      % ref.Data is Nx2: [x_d y_d] 
+ref = timeseries(xy);      % ref.Data is Nx2: [x_d y_d] 
 assignin('base','ref', ref);
 
 disp('Inizio Auto-Tuning...');
@@ -44,9 +41,8 @@ for i = 1:length(A_test)
         assignin('base', 'a', a);
         assignin('base', 'xi', xi);
         
-
         % Esegui la simulazione 
-        simOut = sim('L_tuning_2024b', 'StopTime', '10');
+        simOut = sim(model, 'StopTime', '10');
                
         e1 = simOut.e_x.Data;
         e2 = simOut.e_y.Data;
