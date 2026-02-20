@@ -5,12 +5,12 @@ xi = 0.71;  % (0,1)
 
 %% Non linear Trajectory Tracking Controller constants
 
-b = 5;  % >0
+b = 50;  % >0
 xi = 0.71;  % (0,1)
 
 %% Simulation Variables
 
-shift_time = 10;  % trajectory tracking time (before regulation)
+shift_time = 15;  % trajectory tracking time (before regulation)
 
 scale = 15;
 type = 'circle';
@@ -24,7 +24,7 @@ S = load('trajectory.mat');   % contains S.traj.xy and S.traj.t
 % unicycle initial conditions
 x0 = S.traj.xy(1,1);
 y0 = S.traj.xy(1,2);
-theta0 = -pi/2;
+theta0 = pi/4;
 
 xy = S.traj.xy;               % [N x 2]
 t  = S.traj.t;                % [N x 1] [belongs to (0,1)]
@@ -39,7 +39,7 @@ assignin('base','ref', ref);
 %% 4. Run Simulink Program and save results
 
 Ts = 0.001;
-model = 'L_tuning_2024b';
+model = 'NL_tuning_2024b';
 
 load_system(model);
 

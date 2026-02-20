@@ -21,10 +21,14 @@ k2 = 1.5;
 k3 = 2;
 
 %% Simulation Variables
+<<<<<<< Updated upstream
 
 Ts = 0.001;
 
 shift_time = 20;  % trajectory tracking time (before regulation)
+=======
+shift_time = 50;  % trajectory tracking time (before regulation)
+>>>>>>> Stashed changes
 stop_time = shift_time + 10;
 
 %% desired trajectory generation

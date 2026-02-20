@@ -3,7 +3,7 @@ model = 'L_tuning_2024b';
 load_system(model);
 
 % 1. Definisci la griglia dei parametri da esplorare
-A_test = 69 : 1 : 80;          % Testa 'a' da 1 a 10
+A_test = 5 : 1 : 15;          % Testa 'a' da 1 a 10
 XI_test = 0.2 : 0.1 : 0.8;    % Testa lo smorzamento 'xi' da 0.4 a 1
 
 best_cost = inf;
@@ -24,9 +24,15 @@ x0 = S.traj.xy(1,1);
 y0 = S.traj.xy(1,2);
 theta0 = -pi/2;
         
-xy = S.traj.xy;               % [N x 2]
+xy = S.traj.xy; % [N x 2]
+t  = S.traj.t;  
+
+shift_time = 30;
+Tfinal = shift_time;           % seconds
+t = t * Tfinal;
+
+ref = timeseries(xy, t);      % ref.Data is Nx2: [x_d y_d]
         
-ref = timeseries(xy);      % ref.Data is Nx2: [x_d y_d] 
 assignin('base','ref', ref);
 
 disp('Inizio Auto-Tuning...');

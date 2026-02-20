@@ -20,14 +20,14 @@ function traj = draw_scenarios(scale, type)
     switch lower(type)
         case 'line'
             % LINEA RETTA: 50 punti da sinistra a destra
-            x = linspace(Hh*0.1, Hh*0.9, 50)';
-            y = ones(50, 1) * cy;
+            x = linspace(Hh*0.1, Hh*0.9, 400)';
+            y = ones(400, 1) * cy;
             xy = [x, y];
             
         case 'circle'
             % CERCHIO: raggio 35% della mappa
             R = min(Hh, Wh) * 0.35;
-            theta = linspace(-pi, pi, 50)';
+            theta = linspace(0, 2*pi, 400)';
             xy = [cx + R*cos(theta), cy + R*sin(theta)];
             
         case 'square'
