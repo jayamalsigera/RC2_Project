@@ -10,8 +10,7 @@ xi = 0.71;  % (0,1)
 
 %% Simulation Variables
 
-%shift_time = 3;  % trajectory tracking time (before regulation)
-stop_time = 50;
+shift_time = 10;  % trajectory tracking time (before regulation)
 
 scale = 15;
 type = 'circle';
@@ -30,20 +29,21 @@ theta0 = -pi/2;
 xy = S.traj.xy;               % [N x 2]
 t  = S.traj.t;                % [N x 1] [belongs to (0,1)]
 
-%Tfinal = shift_time;           % seconds
-%t = t * Tfinal;
+Tfinal = shift_time;           % seconds
+t = t * Tfinal;
 
-ref = timeseries(xy);      % ref.Data is Nx2: [x_d y_d]
+ref = timeseries(xy, t);      % ref.Data is Nx2: [x_d y_d]
 
 assignin('base','ref', ref);
 
 %% 4. Run Simulink Program and save results
 
+Ts = 0.001;
 model = 'L_tuning_2024b';
 
 load_system(model);
 
-set_param(model, 'StopTime', num2str(stop_time));
+set_param(model, 'StopTime', num2str(shift_time));
 simOut = sim(model);
 
 %% 5. Replay the saved data
