@@ -1,5 +1,6 @@
 %% 1. Initialization
 scale = 50;
+Ts = 0.001;
 run('draw(scale)');
 uiwait(gcf); 
 run('mazeGUI(scale)');
@@ -17,7 +18,7 @@ simOut1 = sim(model1, "StopTime", "10");
 res.L.t = simOut1.tout;
 res.L.q = simOut1.q.Data;
 res.L.qdot = simOut1.qdot.Data;
-res.L.ref = simOut1.xy_ref.Data;
+res.L.ref = ref.Data;
 res.L.v = simOut1.vw.Data(:,1);     
 res.L.w = simOut1.vw.Data(:,2);
 res.L.vd = simOut1.vd_wd.Data(:,1);
@@ -28,13 +29,12 @@ res.L.wd = simOut1.vd_wd.Data(:,2);
 model2 = "NL_Trajectory_Tracking_and_Regularization_2024b";
 % Assicurati che nl.b e nl_xi esistano nel workspace dopo simulation.m
 load_system(model2);
-set_param(model2, 'StopTime', num2str(stop_time));
-simOut2 = sim(model2);
+simOut2 = sim(model2, 'StopTime', num2str(stop_time));
 
 res.NL.t = simOut2.tout;
 res.NL.q = simOut2.q.Data;
 res.NL.qdot = simOut1.qdot.Data;
-res.NL.ref = simOut2.xy_ref.Data; % Corretto typo simOut2
+res.NL.ref = ref.Data; % Corretto typo simOut2
 res.NL.v = simOut2.vw.Data(:,1);    
 res.NL.w = simOut2.vw.Data(:,2);
 res.NL.vd = simOut2.vd_wd.Data(:,1);
@@ -51,7 +51,7 @@ simOut3 = sim(model3, 'StopTime', num2str(10));
 res.NL2.t = simOut3.tout;
 res.NL2.q = simOut3.q.Data;
 res.NL2.qdot = simOut1.qdot.Data;
-res.NL2.ref = simOut3.xy_ref.Data; 
+res.NL2.ref = ref.Data; 
 res.NL2.v = simOut3.vw.Data(:,1);     
 res.NL2.w = simOut3.vw.Data(:,2); 
 res.NL2.vd = simOut3.vd_wd.Data(:,1);
