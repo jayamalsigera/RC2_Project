@@ -13,9 +13,9 @@ xi = 0.71;  % (0,1)
 shift_time = 15;  % trajectory tracking time (before regulation)
 
 scale = 15;
-type = 'circle';
+type = 'square';
 
-run('draw_scenarios(scale, type)');
+run('draw_simply_scenarios(scale, type)');
 uiwait(gcf);  % wait until figure is closed
 
 %% desired trajectory generation
@@ -48,4 +48,4 @@ simOut = sim(model);
 
 %% 5. Replay the saved data
 
-run('replay_q_timeseries_on_maze.m');
+run('replay_q_timeseries_on_scenario(type)');

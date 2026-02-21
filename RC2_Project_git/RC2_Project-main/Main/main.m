@@ -3,7 +3,6 @@
 % 3. Run simulation.m for simulation intialization
 % 4. Run Simulink Program and save results
 % 5. Replay the saved results
-Ts = 0.001;
 scale = 50;
 
 %% 1. Run draw.m and draw the required trajectory
