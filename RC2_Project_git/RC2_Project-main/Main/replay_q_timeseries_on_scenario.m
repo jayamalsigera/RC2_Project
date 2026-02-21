@@ -77,7 +77,7 @@ function replay_q_timeseries_on_scenario(type)
         'MarkerSize', 5, 'MarkerEdgeColor', neonCyan, ...
         'MarkerFaceColor', [0.7 0.9 1], 'LineWidth', 1.5);
         
-    neonPink = [1 0.2 0.8];
+    neonRed = [1 0.15 0.15];
     k0 = find(~bad, 1, 'first');
     
     % Inizializza la scia (trail) per vedere il tracking passato
@@ -85,13 +85,13 @@ function replay_q_timeseries_on_scenario(type)
     
     % Disegna l'Uniciclo (Marker Rosa Neon)
     hDot = plot(ax, x(k0), y(k0), 'o', ...
-        'MarkerSize', 10, 'MarkerEdgeColor', neonPink, ...
+        'MarkerSize', 10, 'MarkerEdgeColor', neonRed, ...
         'MarkerFaceColor', [1 0.6 0.9], 'LineWidth', 2.5);
         
     % Disegna il vettore velocità
     velScale = 0.3;
     hVel = quiver(ax, x(k0), y(k0), velScale*vx(k0), velScale*vy(k0), 0, ...
-        'Color', neonPink, 'LineWidth', 2.5, 'MaxHeadSize', 2);
+        'Color', neonRed, 'LineWidth', 2.5, 'MaxHeadSize', 2);
 
     drawnow;
     

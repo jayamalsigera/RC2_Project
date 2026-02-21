@@ -1,4 +1,6 @@
 function drawTrajectory(ax)
+    
+    neonRed = [1 0.15 0.15];
 
     trajFile = 'trajectory.mat';
 
@@ -10,6 +12,9 @@ function drawTrajectory(ax)
 
     hold(ax,'on');
     plot(ax, x, y, ...
-         'y-o', 'LineWidth', 2, ...
-         'MarkerSize', 4, 'MarkerFaceColor','y');
+         '-o', 'Color', neonRed, 'LineWidth', 2, ...
+         'MarkerSize', 4, 'MarkerFaceColor', neonRed, 'MarkerEdgeColor', neonRed);
+    %plot(ax, x, y, ...
+        %'y-o', 'LineWidth', 2, ...
+        % 'MarkerSize', 4, 'MarkerFaceColor','y');
 end

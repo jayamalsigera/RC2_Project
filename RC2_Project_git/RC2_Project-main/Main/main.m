@@ -29,5 +29,5 @@ simOut = sim(model);
 
 %% 5. Replay the saved data
 
-run('replay_q_timeseries_on_maze.m');
+run('replay_q_timeseries_on_mazes.m');
 
