@@ -67,11 +67,18 @@ function traj = draw(scale)
         error('Trajectory too short.');
     end
 
+    % Define the desired constant linear velocity
+    v_des = 50;
+
     xy = unique(xy,'rows','stable');
 
+    % Calculate the distance between consecutive points
     d = sqrt(sum(diff(xy).^2,2));
-    t = [0; cumsum(d)];
-    t = t / t(end);
+    
+    % Calculate time based on cumulative distance and constant velocity
+    t = [0; cumsum(d)] / v_des;
+    %t = [0; cumsum(d)];
+    %t = t / t(end);
 
     traj.xy = xy; 
     traj.t  = t;

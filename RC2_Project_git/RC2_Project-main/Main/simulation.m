@@ -24,9 +24,9 @@ k3 = 2;
 
 Ts = 0.001;
 
-shift_time = 20;  % trajectory tracking time (before regulation)
+%shift_time = 20;  % trajectory tracking time (before regulation)
 %shift_time = 50;  % trajectory tracking time (before regulation)
-stop_time = shift_time + 10;
+%stop_time = shift_time + 10;
 
 %% desired trajectory generation
 S = load('trajectory.mat');   % contains S.traj.xy and S.traj.t
@@ -43,8 +43,11 @@ t  = S.traj.t;                % [N x 1] [belongs to (0,1)]
 %last_t = size(xy, 1)-1;
 %assignin('base','last_t', last_t);
 
-Tfinal = shift_time;           % seconds
-t = t * Tfinal;
+%Tfinal = shift_time;           % seconds
+%t = t * Tfinal;
+
+shift_time = t(end);
+stop_time = t(end) + 10;
 
 ref = timeseries(xy, t);      % ref.Data is Nx2: [x_d y_d]
 
