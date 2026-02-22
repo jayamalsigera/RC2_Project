@@ -14,7 +14,7 @@ res = struct();
 
 %% Linear 
 
-model1 = "L_Trajectory_Tracking_and_Regulation_2024b";
+model1 = "L_Trajectory_Tracking_and_Regulation";
 a = 5; xi = 0.706; % gains parameters
 
 load_system(model1);
@@ -69,7 +69,7 @@ res.L2.xi = xi;
 
 %% Non-Linear 
 
-model3 = "NL_Trajectory_Tracking_and_Regularization_2024b";
+model3 = "NL_Trajectory_Tracking_and_Regularization";
 b = 5; xi = 0.706;  % gains paramaters
 
 load_system(model3);
@@ -96,7 +96,7 @@ res.NL.xi = xi;
 
 %% Non-Linear 2
 
-model4 = "NL_Trajectory_Tracking_and_Posture_Regulation2_2024b";
+model4 = "NL_Trajectory_Tracking_and_Posture_Regulation2";
 b = 5; xi = 0.706; % gains parameters
 
 load_system(model4);

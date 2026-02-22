@@ -42,7 +42,7 @@ assignin('base','ref', ref);
 %% 4. Run Simulink Program and save results
 
 Ts = 0.001;
-model = 'NL_tuning_2024b';
+model = 'NL_tuning';
 
 load_system(model);
 

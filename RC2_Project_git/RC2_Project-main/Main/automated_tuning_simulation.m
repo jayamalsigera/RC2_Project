@@ -1,5 +1,5 @@
 %% 4. Automated Tuning (Grid Search)
-model = 'L_tuning_2024b';
+model = 'L_tuning';
 load_system(model);
 
 % 1. Definisci la griglia dei parametri da esplorare

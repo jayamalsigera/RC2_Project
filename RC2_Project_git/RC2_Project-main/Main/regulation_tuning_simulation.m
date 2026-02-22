@@ -22,7 +22,7 @@ for kv = kv_test
             assignin('base', 'y0', y0);
             assignin('base', 'theta0', theta0);
 
-            simOut = sim('Regulation_tuning_2024b', 'StopTime', '10');
+            simOut = sim('Regulation_tuning', 'StopTime', '10');
 
             t = simOut.tout;
             % errors

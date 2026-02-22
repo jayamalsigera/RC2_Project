@@ -21,7 +21,8 @@ uiwait(gcf);
 run('simulation.m');
 
 %% 4. Run Simulink Program and save results
-model = "NL_Trajectory_Tracking_and_Regularization_2024b";
+
+model = "NL_Trajectory_Tracking_and_Regularization";
 
 load_system(model);
 
@@ -31,4 +32,3 @@ simOut = sim(model);
 %% 5. Replay the saved data
 
 run('replay_q_timeseries_on_mazes.m');
-
