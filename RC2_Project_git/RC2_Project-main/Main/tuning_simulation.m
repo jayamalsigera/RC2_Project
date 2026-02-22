@@ -13,7 +13,7 @@ xi = 0.71;  % (0,1)
 shift_time = 15;  % trajectory tracking time (before regulation)
 
 scale = 15;
-type = 'square';
+type = 'circle';
 
 run('draw_simply_scenarios(scale, type)');
 uiwait(gcf);  % wait until figure is closed

@@ -5,12 +5,16 @@ clc; close all;
 S = load('trajectory.mat');
 xy = S.traj.xy;               % [N x 2]
 t  = S.traj.t;                % [N x 1] 
-Tfinal = shift_time;           % seconds
-t = t * Tfinal;          %------------- TO BE MODIFIED --------------------
-ref = timeseries(xy, t); 
+%Tfinal = shift_time;           % seconds
+%t = t * Tfinal;          %------------- TO BE MODIFIED --------------------
+%ref = timeseries(xy, t);
+shift_time = t(end);
+stop_time = t(end) + 10;
+
+ref = timeseries(xy, t);  
 
 load('results.mat', 'res'); 
-
+load('parking_box.mat');
 
 % colours for the plot
 cL  = '#0072BD'; % Blu for linear controller

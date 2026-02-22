@@ -86,7 +86,7 @@ function replay_q_timeseries_on_scenario(type)
     % Disegna l'Uniciclo (Marker Rosa Neon)
     hDot = plot(ax, x(k0), y(k0), 'o', ...
         'MarkerSize', 10, 'MarkerEdgeColor', neonRed, ...
-        'MarkerFaceColor', [1 0.6 0.9], 'LineWidth', 2.5);
+        'MarkerFaceColor', neonRed, 'LineWidth', 2.5);
         
     % Disegna il vettore velocità
     velScale = 0.3;

@@ -11,6 +11,8 @@ x_box     = 850;
 y_box     = 880;
 theta_box = 0;
 
+save('parking_box.mat', 'x_box', 'y_box', 'theta_box');
+
 %% Gains for posture regulation
 %k1 = 0.22;    
 %k2 = 1.0;
