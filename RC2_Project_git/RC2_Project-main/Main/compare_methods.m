@@ -2,7 +2,7 @@
 
 scale = 50;
 Ts = 0.001;
-v_des = 50;
+v_des = 200;
 
 run('draw(scale, v_des)');
 uiwait(gcf); 
@@ -42,7 +42,7 @@ res.L.xi = xi;
 %% Linear 2
 
 model2 = "L_Trajectory_Tracking_and_Posture_Regulation2";
-a= 5; xi = 0.706; % gains parameters
+a= 20; xi = 0.4; % gains parameters
 
 load_system(model2);
 simOut2 = sim(model2, 'StopTime', num2str(stop_time));

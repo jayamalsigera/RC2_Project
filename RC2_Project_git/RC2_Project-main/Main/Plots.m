@@ -35,6 +35,7 @@ subplot(1, 2, 1);
 hold on; grid on;
 plot(ref.Data(:, 1), ref.Data(:, 2), 'k--', 'LineWidth', 1.5, 'DisplayName', 'Reference');
 plot(res.L.q(idx_L_traj, 1), res.L.q(idx_L_traj, 2), 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'Linear');
+plot(res.L2.q(idx_L2_traj, 1), res.L2.q(idx_L2_traj, 2), 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'Linear');
 plot(res.NL.q(idx_NL_traj, 1), res.NL.q(idx_NL_traj, 2), 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL 1');
 plot(res.NL2.q(idx_NL2_traj, 1), res.NL2.q(idx_NL2_traj, 2), 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL 2');
 title('XY Path - Trajectory Tracking');
@@ -47,10 +48,12 @@ subplot(2, 2, 2);
 hold on; grid on;
 % Desired velocity (vd) - dashed
 plot(res.L.t(idx_L_traj), res.L.vd(idx_L_traj), '--', 'Color', cL, 'LineWidth', 1, 'DisplayName', 'L v_d');
+plot(res.L2.t(idx_L2_traj), res.L2.vd(idx_L2_traj), '--', 'Color', cL, 'LineWidth', 1, 'DisplayName', 'L v_d');
 plot(res.NL.t(idx_NL_traj), res.NL.vd(idx_NL_traj), '--', 'Color', cNL, 'LineWidth', 1, 'DisplayName', 'NL1 v_d');
 plot(res.NL2.t(idx_NL2_traj), res.NL2.vd(idx_NL2_traj), '--', 'Color', cNL2, 'LineWidth', 1, 'DisplayName', 'NL2 v_d');
 % Linear velocity input (v) - continue
 plot(res.L.t(idx_L_traj), res.L.v(idx_L_traj), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L v');
+plot(res.L2.t(idx_L2_traj), res.L2.v(idx_L2_traj), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L v');
 plot(res.NL.t(idx_NL_traj), res.NL.v(idx_NL_traj), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL1 v');
 plot(res.NL2.t(idx_NL2_traj), res.NL2.v(idx_NL2_traj), '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL2 v');
 title('Linear Velocity (v_d, v)');
@@ -62,10 +65,12 @@ subplot(2, 2, 4);
 hold on; grid on;
 % Desired input (wd) - dashed
 plot(res.L.t(idx_L_traj), res.L.wd(idx_L_traj), '--', 'Color', cL, 'LineWidth', 1, 'DisplayName', 'L wd');
+plot(res.L2.t(idx_L2_traj), res.L2.wd(idx_L2_traj), '--', 'Color', cL, 'LineWidth', 1, 'DisplayName', 'L wd');
 plot(res.NL.t(idx_NL_traj), res.NL.wd(idx_NL_traj), '--', 'Color', cNL, 'LineWidth', 1, 'DisplayName', 'NL1 wd');
 plot(res.NL2.t(idx_NL2_traj), res.NL2.wd(idx_NL2_traj), '--', 'Color', cNL2, 'LineWidth', 1, 'DisplayName', 'NL2 wd');
 % Angular velocity input (w) - continue
 plot(res.L.t(idx_L_traj), res.L.w(idx_L_traj), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L w');
+plot(res.L2.t(idx_L2_traj), res.L2.w(idx_L2_traj), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L w');
 plot(res.NL.t(idx_NL_traj), res.NL.w(idx_NL_traj), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL1 w');
 plot(res.NL2.t(idx_NL2_traj), res.NL2.w(idx_NL2_traj), '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL2 w');
 title('Angular Velocity (\omega, \omega_d)');
@@ -76,6 +81,7 @@ legend("location", "best")
 
 % Regulation Indexes
 idx_L_reg  = res.L.t > shift_time;
+idx_L2_reg  = res.L2.t > shift_time;
 idx_NL_reg = res.NL.t > shift_time;
 idx_NL2_reg= res.NL2.t > shift_time;
 
@@ -86,6 +92,7 @@ subplot(1, 2, 1);
 hold on; grid on;
 plot(x_box, y_box, 'ks', 'MarkerSize', 10, 'MarkerFaceColor', 'k', 'DisplayName', 'Target Box');
 plot(res.L.q(idx_L_reg, 1), res.L.q(idx_L_reg, 2), 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'Linear');
+plot(res.L2.q(idx_L2_reg, 1), res.L.q(idx_L2_reg, 2), 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'Linear');
 plot(res.NL.q(idx_NL_reg, 1), res.NL.q(idx_NL_reg, 2), 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL1');
 plot(res.NL2.q(idx_NL2_reg, 1), res.NL2.q(idx_NL2_reg, 2), 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL2');
 title('XY Path - Regulation to Box');
@@ -97,10 +104,12 @@ axis equal;
 subplot(3, 2, 2);
 hold on; grid on;
 dist_L = sqrt((res.L.q(idx_L_reg, 1) - x_box).^2 + (res.L.q(idx_L_reg, 2) - y_box).^2);
+dist_L2 = sqrt((res.L2.q(idx_L2_reg, 1) - x_box).^2 + (res.L2.q(idx_L2_reg, 2) - y_box).^2);
 dist_NL = sqrt((res.NL.q(idx_NL_reg, 1) - x_box).^2 + (res.NL.q(idx_NL_reg, 2) - y_box).^2);
 dist_NL2 = sqrt((res.NL2.q(idx_NL2_reg, 1) - x_box).^2 + (res.NL2.q(idx_NL2_reg, 2) - y_box).^2);
 
 plot(res.L.t(idx_L_reg), dist_L, '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L error');
+plot(res.L2.t(idx_L2_reg), dist_L2, '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L error');
 plot(res.NL.t(idx_NL_reg), dist_NL, '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL1 error');
 plot(res.NL2.t(idx_NL2_reg), dist_NL2, '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL2 error');
 title('Distance Error to Target');
@@ -112,6 +121,7 @@ subplot(3, 2, 4);
 hold on; grid on;
 % Attuali (v) - continue
 plot(res.L.t(idx_L_reg), res.L.v(idx_L_reg), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L v');
+plot(res.L2.t(idx_L2_reg), res.L.v(idx_L2_reg), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L v');
 plot(res.NL.t(idx_NL_reg), res.NL.v(idx_NL_reg), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL1 v');
 plot(res.NL2.t(idx_NL2_reg), res.NL2.v(idx_NL2_reg), '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL2 v');
 title('Linear Velocity v - regulation');
@@ -124,6 +134,7 @@ subplot(3, 2, 6);
 hold on; grid on;
 % Attuali (w) - continue
 plot(res.L.t(idx_L_reg), res.L.w(idx_L_reg), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L w');
+plot(res.L2.t(idx_L2_reg), res.L.w(idx_L2_reg), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L w');
 plot(res.NL.t(idx_NL_reg), res.NL.w(idx_NL_reg), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL1 w');
 plot(res.NL2.t(idx_NL2_reg), res.NL2.w(idx_NL2_reg), '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL2 w');
 title('Angular Velocity \omega - regulation');
