@@ -14,21 +14,25 @@ theta_box = 0;
 save('parking_box.mat', 'x_box', 'y_box', 'theta_box');
 
 %% Gains for posture regulation
-%k1 = 0.22;    
-%k2 = 1.0;
-%k3 = 0.4;
+%k1 = 3;
+%k2 = 1.5;  GAINS DI DAVIDE
+%k3 = 2;
 
-k1 = 3;
-k2 = 1.5;
-k3 = 2;
+% Cartesian Regulation Gains
+Kv = 1;
+Kw = 4;
+save("Cartesian_gains.mat", "Kv", "Kw");
+
+% Posture Regulation Gains
+K1 = 0.5;
+K2 = 5;
+K3 = 2;
+save("Posture_gains.mat", "K1", "K2", "K3")
 
 %% Simulation Variables
 
 Ts = 0.001;
 
-%shift_time = 20;  % trajectory tracking time (before regulation)
-%shift_time = 50;  % trajectory tracking time (before regulation)
-%stop_time = shift_time + 10;
 
 %% desired trajectory generation
 S = load('trajectory.mat');   % contains S.traj.xy and S.traj.t
@@ -41,15 +45,9 @@ theta0 = pi/4;
 xy = S.traj.xy;               % [N x 2]
 t  = S.traj.t;                % [N x 1] [belongs to (0,1)]
 
-% last (x,y) to be tracked
-%last_t = size(xy, 1)-1;
-%assignin('base','last_t', last_t);
-
-%Tfinal = shift_time;           % seconds
-%t = t * Tfinal;
-
-shift_time = t(end);
-stop_time = t(end) + 10;
+% simulation times
+shift_time = t(end);  % time traj2reg
+stop_time = t(end) + 10;  % stop simulation
 
 ref = timeseries(xy, t);      % ref.Data is Nx2: [x_d y_d]
 

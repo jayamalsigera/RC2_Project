@@ -16,7 +16,7 @@ load('parking_box.mat');
 
 % colours for the plot
 cL   = '#0072BD'; % Blue
-cL2  = '#7E2F8E'; % Purple (Molto diverso dal Blue)
+cL2  = '#7E2F8E'; % Purple
 cNL  = '#D95319'; % Red
 cNL2 = '#EDB120'; % Yellow/Gold
 
@@ -57,74 +57,95 @@ subplot(2, 2, 4);
 hold on; grid on;
 % Desired input (wd) - dashed
 plot(res.L.t(idx_L_traj), res.L.wd(idx_L_traj), '--', 'Color', 'k', 'LineWidth', 1, 'DisplayName', 'Flatness \omega_d');
-plot(res.L.t(idx_L_traj), res.L.w(idx_L_traj), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L w');
-plot(res.NL.t(idx_NL_traj), res.NL.w(idx_NL_traj), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL w');
-title('Angular Velocity (\omega, \omega_d)');
+plot(res.L.t(idx_L_traj), res.L.w(idx_L_traj), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L \omega');
+plot(res.NL.t(idx_NL_traj), res.NL.w(idx_NL_traj), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL \omega');
+title('Angular Velocity (\omega_d, \omega)');
 xlabel('Time [s]'); ylabel('\omega [rad/s]');
 lgd = legend('Location', 'best');
 lgd.ItemHitFcn = @(~, evt) set(evt.Peer, 'Visible', ~strcmp(evt.Peer.Visible, 'on'));
 
-%% 3. Posture Regulation ( t > shift_time )
-
+%% Regulation ( t > shift_time )
 % Regulation Indexes
 idx_L_reg  = res.L.t > shift_time;
 idx_L2_reg = res.L2.t > shift_time;
 idx_NL_reg = res.NL.t > shift_time;
 idx_NL2_reg= res.NL2.t > shift_time;
 
-figure('Name', 'Posture Regulation Phase', 'Position', [150, 150, 1200, 800]);
+% Imposto la figure per essere bella grande e larga
+figure('Name', 'Regulation Phase', 'Units', 'normalized', 'Position', [0.05, 0.1, 0.9, 0.8]);
 
-% --- Plot X-Y (Trajectory to the box) ---
-subplot(1, 2, 1);
+% =========================================================
+% Mid : XY path
+% =========================================================
+subplot(2, 3, [2, 5]);
 hold on; grid on;
 plot(x_box, y_box, 'ks', 'MarkerSize', 10, 'MarkerFaceColor', 'k', 'DisplayName', 'Target Box');
-plot(res.L.q(idx_L_reg, 1), res.L.q(idx_L_reg, 2), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'Linear');
-plot(res.L2.q(idx_L2_reg, 1), res.L2.q(idx_L2_reg, 2), '-', 'Color', cL2, 'LineWidth', 1.5, 'DisplayName', 'Linear (L2)');
-plot(res.NL.q(idx_NL_reg, 1), res.NL.q(idx_NL_reg, 2), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL1');
-plot(res.NL2.q(idx_NL2_reg, 1), res.NL2.q(idx_NL2_reg, 2), '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL2');
+plot(res.L.q(idx_L_reg, 1), res.L.q(idx_L_reg, 2), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L Cartesian');
+plot(res.L2.q(idx_L2_reg, 1), res.L2.q(idx_L2_reg, 2), '-', 'Color', cL2, 'LineWidth', 1.5, 'DisplayName', 'L Posture');
+plot(res.NL.q(idx_NL_reg, 1), res.NL.q(idx_NL_reg, 2), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL Cartesian');
+plot(res.NL2.q(idx_NL2_reg, 1), res.NL2.q(idx_NL2_reg, 2), '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL Posture');
 title('XY Path - Regulation to Box');
 xlabel('X [cm]'); ylabel('Y [cm]'); axis equal;
 lgd = legend('Location', 'best');
 lgd.ItemHitFcn = @(~, evt) set(evt.Peer, 'Visible', ~strcmp(evt.Peer.Visible, 'on'));
 
-% --- Distance Error Plot ---
-subplot(3, 2, 2);
+% =========================================================
+% Left-Top: Distance error (spazio 1)
+% =========================================================
+subplot(2, 3, 1);
 hold on; grid on;
 dist_L = sqrt((res.L.q(idx_L_reg, 1) - x_box).^2 + (res.L.q(idx_L_reg, 2) - y_box).^2);
 dist_L2 = sqrt((res.L2.q(idx_L2_reg, 1) - x_box).^2 + (res.L2.q(idx_L2_reg, 2) - y_box).^2);
 dist_NL = sqrt((res.NL.q(idx_NL_reg, 1) - x_box).^2 + (res.NL.q(idx_NL_reg, 2) - y_box).^2);
 dist_NL2 = sqrt((res.NL2.q(idx_NL2_reg, 1) - x_box).^2 + (res.NL2.q(idx_NL2_reg, 2) - y_box).^2);
-plot(res.L.t(idx_L_reg), dist_L, '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L error');
-plot(res.L2.t(idx_L2_reg), dist_L2, '-', 'Color', cL2, 'LineWidth', 1.5, 'DisplayName', 'L2 error');
-plot(res.NL.t(idx_NL_reg), dist_NL, '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL1 error');
-plot(res.NL2.t(idx_NL2_reg), dist_NL2, '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL2 error');
-title('Distance Error to Target');
-ylabel('Distance [cm]');
+plot(res.L.t(idx_L_reg), dist_L, '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L Cartesian');
+plot(res.L2.t(idx_L2_reg), dist_L2, '-', 'Color', cL2, 'LineWidth', 1.5, 'DisplayName', 'L Posture');
+plot(res.NL.t(idx_NL_reg), dist_NL, '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL Cartesian');
+plot(res.NL2.t(idx_NL2_reg), dist_NL2, '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL Posture');
+title('Distance Error');
+ylabel('Distance [cm]'); xlabel('Time [s]');
 lgd = legend('Location', 'best');
 lgd.ItemHitFcn = @(~, evt) set(evt.Peer, 'Visible', ~strcmp(evt.Peer.Visible, 'on'));
 
-% --- Linear velocity plot v ---
-subplot(3, 2, 4);
+% =========================================================
+% Left-Bottom: Linear Velocity
+% =========================================================
+subplot(2, 3, 4);
 hold on; grid on;
-% Attuali (v) - continue
-plot(res.L.t(idx_L_reg), res.L.v(idx_L_reg), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L v');
-plot(res.L2.t(idx_L2_reg), res.L2.v(idx_L2_reg), '-', 'Color', cL2, 'LineWidth', 1.5, 'DisplayName', 'L2 v');
-plot(res.NL.t(idx_NL_reg), res.NL.v(idx_NL_reg), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL1 v');
-plot(res.NL2.t(idx_NL2_reg), res.NL2.v(idx_NL2_reg), '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL2 v');
+plot(res.L.t(idx_L_reg), res.L.v(idx_L_reg), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L v - Cartesian');
+plot(res.L2.t(idx_L2_reg), res.L2.v(idx_L2_reg), '-', 'Color', cL2, 'LineWidth', 1.5, 'DisplayName', 'L v - Posture');
+plot(res.NL.t(idx_NL_reg), res.NL.v(idx_NL_reg), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL v - Cartesian');
+plot(res.NL2.t(idx_NL2_reg), res.NL2.v(idx_NL2_reg), '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL v - Posture');
 title('Linear Velocity v - regulation');
-ylabel('v [cm/s]');
+ylabel('v [cm/s]'); xlabel('Time [s]');
 lgd = legend('Location', 'best');
 lgd.ItemHitFcn = @(~, evt) set(evt.Peer, 'Visible', ~strcmp(evt.Peer.Visible, 'on'));
 
-% --- Angular velocity plot w ---
-subplot(3, 2, 6);
+% =========================================================
+% Right-Top : Theta
+% =========================================================
+subplot(2, 3, 3);
 hold on; grid on;
-% Attuali (w) - continue
-plot(res.L.t(idx_L_reg), res.L.w(idx_L_reg), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L w');
-plot(res.L2.t(idx_L2_reg), res.L2.w(idx_L2_reg), '-', 'Color', cL2, 'LineWidth', 1.5, 'DisplayName', 'L2 w');
-plot(res.NL.t(idx_NL_reg), res.NL.w(idx_NL_reg), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL1 w');
-plot(res.NL2.t(idx_NL2_reg), res.NL2.w(idx_NL2_reg), '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL2 w');
+yline(0, 'k--', 'LineWidth', 1.5, 'DisplayName', '\theta = 0');
+plot(res.L.t(idx_L_reg), res.L.q(idx_L_reg, 3), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L \theta - Cartesian');
+plot(res.L2.t(idx_L2_reg), res.L2.q(idx_L2_reg, 3), '-', 'Color', cL2, 'LineWidth', 1.5, 'DisplayName', 'L \theta - Posture');
+plot(res.NL.t(idx_NL_reg), res.NL.q(idx_NL_reg, 3), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL \theta - Cartesian');
+plot(res.NL2.t(idx_NL2_reg), res.NL2.q(idx_NL2_reg, 3), '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL \theta - Posture');
+title('Orientation Angle \theta - regulation');
+ylabel('\theta [rad]'); xlabel('Time [s]');
+lgd = legend('Location', 'best');
+lgd.ItemHitFcn = @(~, evt) set(evt.Peer, 'Visible', ~strcmp(evt.Peer.Visible, 'on'));
+
+% =========================================================
+% Right-Bottom: Angular Velocity
+% =========================================================
+subplot(2, 3, 6);
+hold on; grid on;
+plot(res.L.t(idx_L_reg), res.L.w(idx_L_reg), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'L \omega - Cartesian');
+plot(res.L2.t(idx_L2_reg), res.L2.w(idx_L2_reg), '-', 'Color', cL2, 'LineWidth', 1.5, 'DisplayName', 'L \omega - Posture');
+plot(res.NL.t(idx_NL_reg), res.NL.w(idx_NL_reg), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'NL \omega - Cartesian');
+plot(res.NL2.t(idx_NL2_reg), res.NL2.w(idx_NL2_reg), '-', 'Color', cNL2, 'LineWidth', 1.5, 'DisplayName', 'NL \omega - Posture');
 title('Angular Velocity \omega - regulation');
-xlabel('Time [s]'); ylabel('\omega [rad/s]');
+ylabel('\omega [rad/s]'); xlabel('Time [s]');
 lgd = legend('Location', 'best');
 lgd.ItemHitFcn = @(~, evt) set(evt.Peer, 'Visible', ~strcmp(evt.Peer.Visible, 'on'));

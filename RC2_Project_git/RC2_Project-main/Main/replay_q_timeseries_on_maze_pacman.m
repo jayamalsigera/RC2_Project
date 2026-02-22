@@ -8,10 +8,21 @@ function replay_q_timeseries_on_maze_pacman()
     
     Q = q.Data;
     V = qdot.Data;
-    x  = Q(:,1);  y  = Q(:,2);
-    vx = V(:,1);  vy = V(:,2);
+    x  = Q(:,1);  
+    y  = Q(:,2);
     
-    bad = ~(isfinite(x) & isfinite(y));
+    % [NUOVO] Estrazione dell'angolo theta dal terzo elemento di q
+    if size(Q, 2) >= 3
+        theta = Q(:,3);
+    else
+        theta = zeros(size(x)); % Fallback nel caso in cui theta non ci sia
+    end
+    
+    vx = V(:,1);  
+    vy = V(:,2);
+    
+    % [NUOVO] Aggiungiamo il controllo di validità anche per theta
+    bad = ~(isfinite(x) & isfinite(y) & isfinite(theta));
     if any(bad)
         fprintf('Non-finite q samples: %d / %d\n', nnz(bad), numel(bad));
     end
@@ -48,15 +59,13 @@ function replay_q_timeseries_on_maze_pacman()
     end
     
     offset = scale / 2;
-    margin = scale; % <--- ECCO IL PADDING! Tagliamo via una cella dai bordi esterni
+    margin = scale; 
     
-    % Generiamo la griglia partendo più internamente
     [Xg, Yg] = meshgrid((offset + margin) : scale : (Hh - offset - margin), ...
                         (offset + margin) : scale : (Wh - offset - margin));
     all_px = Xg(:);
     all_py = Yg(:);
     
-    % Manteniamo solo i punti sulla strada (dove wallPlot == 1)
     keep_initial = false(size(all_px));
     for i = 1:length(all_px)
         c_idx = max(1, min(Hh, round(all_px(i))));
@@ -70,7 +79,6 @@ function replay_q_timeseries_on_maze_pacman()
     active_px = all_px(keep_initial);
     active_py = all_py(keep_initial);
     
-    % Disegniamo i punti validi
     hPoints = plot(ax, active_px, active_py, 'o', ...
         'MarkerSize', 4, 'MarkerEdgeColor', neonCyan, ...
         'MarkerFaceColor', [0.7 0.9 1], 'LineWidth', 1);
@@ -80,11 +88,28 @@ function replay_q_timeseries_on_maze_pacman()
     % --- SCIA DEL ROBOT ---
     hTrail = plot(ax, x(k0), y(k0), '-', 'Color', [1 0.2 0.8 0.6], 'LineWidth', 1.5);
     
-    % --- DISEGNO ROBOT E VELOCITÀ ---
-    hDot = plot(ax, x(k0), y(k0), 'o', ...
-        'MarkerSize', 10, 'MarkerEdgeColor', neonRed, ...
-        'MarkerFaceColor', neonRed, 'LineWidth', 2.5);
+    % --- [NUOVO] DEFINIZIONE FORMA UNICYCLE (Arrowhead) ---
+    % Definiamo i vertici di base centrati in (0,0) che puntano verso destra (angolo 0).
+    rs = scale * 0.8; % Dimensione della sagoma rispetto alla scala
+    base_robot_shape = [
+         0.6,   0.0;  % Punta anteriore
+        -0.4,   0.4;  % Estremità posteriore sinistra
+        -0.2,   0.0;  % Rientranza posteriore centrale (dà la forma a freccia)
+        -0.4,  -0.4;  % Estremità posteriore destra
+         0.6,   0.0   % Chiusura poligono
+    ] * rs;
+    
+    % Calcolo della posizione iniziale orientata
+    th0 = theta(k0);
+    R0 = [cos(th0), -sin(th0); sin(th0), cos(th0)];
+    pts0 = (R0 * base_robot_shape')';
+    pts0 = pts0 + [x(k0), y(k0)];
+    
+    % Usiamo 'patch' al posto di 'plot' per disegnare il triangolo pieno
+    hRobot = patch(ax, pts0(:,1), pts0(:,2), neonRed, ...
+        'EdgeColor', [1 0.5 0.5], 'LineWidth', 1.5, 'FaceAlpha', 0.9);
         
+    % --- DISEGNO VELOCITÀ ---
     velScale = 0.3;
     hVel = quiver(ax, x(k0), y(k0), velScale*vx(k0), velScale*vy(k0), 0, ...
         'Color', neonRed, 'LineWidth', 2.5, 'MaxHeadSize', 2);
@@ -109,7 +134,16 @@ function replay_q_timeseries_on_maze_pacman()
         trail_x = [trail_x; x(k)];
         trail_y = [trail_y; y(k)];
         set(hTrail, 'XData', trail_x, 'YData', trail_y);
-        set(hDot, 'XData', x(k), 'YData', y(k));
+        
+        % --- [NUOVO] AGGIORNAMENTO ORIENTAMENTO E POSIZIONE ROBOT ---
+        th = theta(k);
+        % Matrice di rotazione 2D
+        R = [cos(th), -sin(th); sin(th), cos(th)];
+        % Ruotiamo la forma base e la trasliamo nella posizione attuale
+        pts = (R * base_robot_shape')';
+        pts = pts + [x(k), y(k)];
+        % Aggiorniamo i dati della patch
+        set(hRobot, 'XData', pts(:,1), 'YData', pts(:,2));
         
         if isfinite(vx(k)) && isfinite(vy(k))
             set(hVel, 'XData', x(k), 'YData', y(k), ...

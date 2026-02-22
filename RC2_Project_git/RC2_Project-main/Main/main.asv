@@ -3,12 +3,14 @@
 % 3. Run simulation.m for simulation intialization
 % 4. Run Simulink Program and save results
 % 5. Replay the saved results
-Ts
+clc, close all
+
 scale = 50;
+v_des = 50;
 
 %% 1. Run draw.m and draw the required trajectory
 
-run('draw(scale)');
+run('draw(scale, v_des)');
 uiwait(gcf);  % wait until figure is closed
 
 %% 2. Run mazeGUI.m to see the trajectory on the Maze
@@ -21,7 +23,8 @@ uiwait(gcf);
 run('simulation.m');
 
 %% 4. Run Simulink Program and save results
-model = "NL_Trajectory_Tracking_and_Regularization_2024b";
+
+model = "NL_Trajectory_Tracking_and_Cartesian_Regulation";
 
 load_system(model);
 
@@ -30,5 +33,4 @@ simOut = sim(model);
 
 %% 5. Replay the saved data
 
-run('replay_q_timeseries_on_maze.m');
-
+run('replay_q_timeseries_on_maze_pacman.m');

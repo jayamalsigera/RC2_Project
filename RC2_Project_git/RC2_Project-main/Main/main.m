@@ -24,7 +24,7 @@ run('simulation.m');
 
 %% 4. Run Simulink Program and save results
 
-model = "NL_Trajectory_Tracking_and_Regularization";
+model = "NL_Trajectory_Tracking_and_Cartesian_Regulation";
 
 load_system(model);
 
