@@ -3,6 +3,8 @@
 % 3. Run simulation.m for simulation intialization
 % 4. Run Simulink Program and save results
 % 5. Replay the saved results
+clc, close all
+
 scale = 50;
 v_des = 50;
 
@@ -31,4 +33,4 @@ simOut = sim(model);
 
 %% 5. Replay the saved data
 
-run('replay_q_timeseries_on_mazes.m');
+run('replay_q_timeseries_on_maze_pacman.m');

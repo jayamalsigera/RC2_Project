@@ -51,4 +51,4 @@ simOut = sim(model);
 
 %% 5. Replay the saved data
 
-run('replay_q_timeseries_on_scenario(type)');
+run('replay_q_timeseries_on_scenario_pacman(type)');
