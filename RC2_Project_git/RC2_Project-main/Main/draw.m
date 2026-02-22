@@ -1,4 +1,4 @@
-function traj = draw(scale)
+function traj = draw(scale, v_des)
 
     %neonCyan = [0 0.8 1];
     %neonRed = [1 0.15 0.15];
@@ -66,10 +66,7 @@ function traj = draw(scale)
     if size(xy,1) < 2
         error('Trajectory too short.');
     end
-
-    % Define the desired constant linear velocity
-    v_des = 50;
-
+    
     xy = unique(xy,'rows','stable');
 
     % Calculate the distance between consecutive points

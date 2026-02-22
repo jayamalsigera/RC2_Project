@@ -10,12 +10,13 @@ xi = 0.71;  % (0,1)
 
 %% Simulation Variables
 
-shift_time = 15;  % trajectory tracking time (before regulation)
+%shift_time = 15;  % trajectory tracking time (before regulation)
 
 scale = 15;
-type = 'circle';
+v_des = 50;
+type = 'line';
 
-run('draw_simply_scenarios(scale, type)');
+run('draw_simply_scenarios(scale, type, v_des)');
 uiwait(gcf);  % wait until figure is closed
 
 %% desired trajectory generation
@@ -29,8 +30,10 @@ theta0 = pi/4;
 xy = S.traj.xy;               % [N x 2]
 t  = S.traj.t;                % [N x 1] [belongs to (0,1)]
 
-Tfinal = shift_time;           % seconds
-t = t * Tfinal;
+%Tfinal = shift_time;           % seconds
+%t = t * Tfinal;
+
+shift_time = t(end);
 
 ref = timeseries(xy, t);      % ref.Data is Nx2: [x_d y_d]
 

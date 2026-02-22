@@ -2,8 +2,9 @@
 
 scale = 50;
 Ts = 0.001;
+v_des = 50;
 
-run('draw(scale)');
+run('draw(scale, v_des)');
 uiwait(gcf); 
 run('mazeGUI(scale)');
 uiwait(gcf);
@@ -94,4 +95,5 @@ res.NL2.xi = xi;
 
 %% 6. Save Data
 
+run('replay_q_timeseries_on_mazes.m');
 save('results.mat', 'res'); 

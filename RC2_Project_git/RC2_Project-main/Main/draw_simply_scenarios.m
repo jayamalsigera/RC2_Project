@@ -1,4 +1,4 @@
-function draw_simply_scenarios(scale, type)
+function draw_simply_scenarios(scale, type, v_des)
     if nargin < 2, type = 'circle'; end % Default se non specificato
     
     G = blankBoard();                      
@@ -54,8 +54,8 @@ function draw_simply_scenarios(scale, type)
     end
     % Calcolo tempo normalizzato
     d = sqrt(sum(diff(xy).^2, 2));
-    t = [0; cumsum(d)];
-    t = t / t(end);
+    t = [0; cumsum(d)] / v_des;
+    %t = t / t(end);
     
     traj.xy = xy; 
     traj.t  = t;
@@ -80,6 +80,7 @@ function draw_simply_scenarios(scale, type)
             x_min = min(traj.xy(:,1)) - offset;
             x_max = max(traj.xy(:,1)) + offset;
             y_cen = traj.xy(1,2);
+            idx = 1:step*2:length(traj.xy);
             pos = [x_min, y_cen - offset, x_max - x_min, 2*offset];
             rectangle(ax, 'Position', pos, 'Curvature', 1, 'EdgeColor', neonColor, 'LineWidth', 2.5);
             

@@ -4,10 +4,11 @@
 % 4. Run Simulink Program and save results
 % 5. Replay the saved results
 scale = 50;
+v_des = 50;
 
 %% 1. Run draw.m and draw the required trajectory
 
-run('draw(scale)');
+run('draw(scale, v_des)');
 uiwait(gcf);  % wait until figure is closed
 
 %% 2. Run mazeGUI.m to see the trajectory on the Maze
