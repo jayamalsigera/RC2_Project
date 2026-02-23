@@ -27,7 +27,7 @@ function draw_simply_scenarios(scale, type, v_des)
         case 'circle'
             % CERCHIO: raggio 35% della mappa
             R = min(Hh, Wh) * 0.35;
-            theta = linspace(0, 2*pi, 400)';
+            theta = linspace(-pi, pi, 400)';
             xy = [cx + R*cos(theta), cy + R*sin(theta)];
             
         case 'square'
