@@ -1,4 +1,4 @@
-function replay_q_timeseries_on_maze_pacman()
+function replay_q_timeseries_on_maze_pacman_real()
     % Recupero variabili dal workspace
     q       = evalin('base','q');
     qdot    = evalin('base','qdot');
@@ -36,9 +36,7 @@ function replay_q_timeseries_on_maze_pacman()
     
     % --- COLOURS SETUP ---
     neonCyan  = [0 0.8 1];
-    neonRed   = [1 0.15 0.15];
-    %neonYellow = [1 1 0.2];
-
+    neonYellow = [1 1 0]; % Giallo Pac-Man classico
     
     fig = figure('Name','Replay q(t) on Maze','Color','k');
     ax  = axes(fig); hold(ax,'on');
@@ -54,21 +52,14 @@ function replay_q_timeseries_on_maze_pacman()
     
     % --- PARKING BOX DRAW ---
     patch(ax, box_x, box_y, neonCyan, ...
-          'FaceAlpha', 0.3, ...          % Trasparenza (0.3 = 30% pieno)
-          'EdgeColor', neonCyan, ...    % Bordo solido
+          'FaceAlpha', 0.3, ...          
+          'EdgeColor', neonCyan, ...    
           'LineWidth', 2, ...
           'LineStyle', '-');
     
-    
     % --- POINTS IN MAZE ---
-    try
-        scale = evalin('base', 'scale');
-    catch
-        scale = 50; 
-    end
-    
-    offset = scale / 2;
-    margin = scale; 
+    try scale = evalin('base', 'scale'); catch, scale = 50; end
+    offset = scale / 2; margin = scale; 
     [Xg, Yg] = meshgrid((offset + margin) : scale : (Hh - offset - margin), ...
                         (offset + margin) : scale : (Wh - offset - margin));
     all_px = Xg(:); all_py = Yg(:);
@@ -77,31 +68,26 @@ function replay_q_timeseries_on_maze_pacman()
     for i = 1:length(all_px)
         c_idx = max(1, min(Hh, round(all_px(i))));
         r_idx = max(1, min(Wh, round(all_py(i))));
-        if wallPlot(r_idx, c_idx) == 1 
-            keep_initial(i) = true;
-        end
+        if wallPlot(r_idx, c_idx) == 1, keep_initial(i) = true; end
     end
-    active_px = all_px(keep_initial);
-    active_py = all_py(keep_initial);
+    active_px = all_px(keep_initial); active_py = all_py(keep_initial);
     
     hPoints = plot(ax, active_px, active_py, 'o', ...
         'MarkerSize', 4, 'MarkerEdgeColor', neonCyan, ...
         'MarkerFaceColor', [0.7 0.9 1], 'LineWidth', 1);
     
     k0 = find(~bad, 1, 'first');
-    hTrail = plot(ax, x(k0), y(k0), '-', 'Color', [1 0.2 0.8 0.6], 'LineWidth', 1.5);
-
+    hTrail = plot(ax, x(k0), y(k0), '-', 'Color', [1 1 0 0.3], 'LineWidth', 1.5);
     
-    % --- UNICYCLE SHAPE & COLOUR ---
-    rs = scale * 0.8; 
-    base_robot_shape = [0.6, 0.0; -0.4, 0.4; -0.2, 0.0; -0.4, -0.4; 0.6, 0.0] * rs;
+    % --- PAC-MAN SHAPE SETUP ---
+    radius = scale * 0.6;
+    num_pts = 10; % Risoluzione del cerchio
     
-    hRobot = patch(ax, 0, 0, neonRed, ...
-        'EdgeColor', neonRed, 'LineWidth', 1.5, 'FaceAlpha', 0.9);
-    % [1 0.5 0.5] was used in "EdgeColor" as altnertnaive
+    % Inizializziamo la patch del robot (Pac-Man)
+    hRobot = patch(ax, 0, 0, neonYellow, 'EdgeColor', 'none');
         
     velScale = 0.3;
-    hVel = quiver(ax, x(k0), y(k0), 0, 0, 0, 'Color', neonRed, 'LineWidth', 2.5);
+    hVel = quiver(ax, x(k0), y(k0), 0, 0, 0, 'Color', neonYellow, 'LineWidth', 2.5);
     
     N = numel(x);
     timesteps = 5;
@@ -115,10 +101,24 @@ function replay_q_timeseries_on_maze_pacman()
         trail_x = [trail_x; x(k)]; trail_y = [trail_y; y(k)];
         set(hTrail, 'XData', trail_x, 'YData', trail_y);
         
+        % --- LOGICA BOCCA DINAMICA ---
+        % L'apertura oscilla tra 0 e 0.5 radianti
+        m_open = 0.5 * abs(sin(k/10)); 
+        angles = linspace(m_open, 2*pi - m_open, num_pts);
+        
+        % Coordinate locali (cerchio con fetta mancante)
+        px = [0, radius * cos(angles)];
+        py = [0, radius * sin(angles)];
+        
+        % Rotazione basata su theta (orientamento robot)
         th = theta(k);
         R = [cos(th), -sin(th); sin(th), cos(th)];
-        pts = (R * base_robot_shape')';
-        pts = pts + [x(k), y(k)];
+        pts = (R * [px; py])';
+        
+        % Traslazione
+        pts(:,1) = pts(:,1) + x(k);
+        pts(:,2) = pts(:,2) + y(k);
+        
         set(hRobot, 'XData', pts(:,1), 'YData', pts(:,2));
         
         if isfinite(vx(k)) && isfinite(vy(k))
@@ -126,6 +126,7 @@ function replay_q_timeseries_on_maze_pacman()
                       'UData', velScale*vx(k), 'VData', velScale*vy(k));
         end
         
+        % --- EAT LOGIC ---
         if ~isempty(active_px)
             dist_sq = (active_px - x(k)).^2 + (active_py - y(k)).^2;
             keep_idx = dist_sq > eat_radius_sq;

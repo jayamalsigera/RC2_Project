@@ -24,10 +24,10 @@ Kw = 4;
 save("Cartesian_gains.mat", "Kv", "Kw");
 
 % Posture Regulation Gains
-K1 = 0.5;
-K2 = 5;
-K3 = 2;
-save("Posture_gains.mat", "K1", "K2", "K3")
+k1 = 0.5;
+k2 = 5;
+k3 = 2;
+save("Posture_gains.mat", "k1", "k2", "k3")
 
 %% Simulation Variables
 

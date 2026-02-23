@@ -24,7 +24,7 @@ run('simulation.m');
 
 %% 4. Run Simulink Program and save results
 
-model = "NL_Trajectory_Tracking_and_Cartesian_Regulation";
+model = "NL_Trajectory_Tracking_and_Posture_Regulation";
 
 load_system(model);
 
@@ -33,4 +33,4 @@ simOut = sim(model);
 
 %% 5. Replay the saved data
 
-run('replay_q_timeseries_on_maze_pacman.m');
+run('replay_q_timeseries_on_maze_pacman_real.m');
