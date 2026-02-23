@@ -14,9 +14,9 @@ theta_box = 0;
 save('parking_box.mat', 'x_box', 'y_box', 'theta_box');
 
 %% Gains for posture regulation
-%k1 = 3;
-%k2 = 1.5;  GAINS DI DAVIDE
-%k3 = 2;
+k1 = 5;
+%k2 = 1.5;  %GAINS DI DAVIDE
+k3 = 0.5;
 
 % Cartesian Regulation Gains
 Kv = 1;
@@ -24,9 +24,9 @@ Kw = 4;
 save("Cartesian_gains.mat", "Kv", "Kw");
 
 % Posture Regulation Gains
-k1 = 0.5;
-k2 = 5;
-k3 = 2;
+% k1 = 0.5;
+ k2 = 8;
+% k3 = 2;
 save("Posture_gains.mat", "k1", "k2", "k3")
 
 %% Simulation Variables
