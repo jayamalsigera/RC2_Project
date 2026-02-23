@@ -14,7 +14,7 @@ xi = 0.71;  % (0,1)
 
 scale = 15;
 v_des = 50;
-type = 'line';
+type = 'square';
 
 run('draw_simply_scenarios(scale, type, v_des)');
 uiwait(gcf);  % wait until figure is closed

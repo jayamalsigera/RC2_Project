@@ -1,15 +1,15 @@
 %% Initialization
 clc; close all;
-
-% load data
-S = load('trajectory.mat');
-xy = S.traj.xy;               % [N x 2]
-t  = S.traj.t;                % [N x 1] 
-shift_time = t(end);
-stop_time = t(end) + 10;
-ref = timeseries(xy, t);  
-load('results.mat', 'res'); 
-load('parking_box.mat');
+% 
+% % load data
+% S = load('trajectory_common.mat');
+% xy = S.traj.xy;               % [N x 2]
+% t  = S.traj.t;                % [N x 1] 
+% shift_time = t(end);
+% stop_time = t(end) + 5;
+% ref = timeseries(xy, t);  
+% load('results.mat', 'res'); 
+% load('parking_box.mat');
 
 % colours for the plot
 cL     = '#0072BD'; % Blue for linear

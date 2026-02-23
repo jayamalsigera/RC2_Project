@@ -8,8 +8,6 @@ save("Lin_Traj_params", "a", "xi")
 b = 50;  % >0
 xi = 0.7;  % (0,1)
 
-save("NonLin_Traj_params", "b", "xi")
-
 %% Parking box pose
 x_box     = 850;
 y_box     = 880;

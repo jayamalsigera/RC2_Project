@@ -1,20 +1,36 @@
 %% Initialization
 
-scale = 50;
 Ts = 0.001;
 v_des = 200;
 
-run('draw(scale, v_des)');
-uiwait(gcf); 
-run('mazeGUI(scale)');
-uiwait(gcf);
-run('simulation.m');
+% Trajectory Tracking Gains Parameters
+load("Lin_Traj_params.mat")
+load("NonLin_Traj_params.mat")
 
-% gains parameters
-a = 15;
-xi = 0.706;
-b = 15;
+% Regulation Gains
+load("Cartesian_gains.mat")
+load("Posture_gains.mat")
 
+% Parking Box coords
+load("parking_box.mat")
+
+% --- LOAD HERE THE TRAJECTORY ---
+S = load('trajectory_dense.mat');   % contains S.traj.xy and S.traj.t
+
+% unicycle initial conditions
+x0 = S.traj.xy(1,1);
+y0 = S.traj.xy(1,2);
+theta0 = pi/4;
+xy = S.traj.xy;               % [N x 2]
+t  = S.traj.t;                % [N x 1]
+
+% simulation times
+shift_time = t(end);  % time traj2reg
+stop_time = t(end) + 5;  % stop simulation
+ref = timeseries(xy, t);      % ref.Data is Nx2: [x_d y_d]
+assignin('base','ref', ref);
+
+% Inizialization Results struct
 res = struct(); 
 
 %% Linear 
@@ -122,6 +138,6 @@ res.NL2.xi = xi;
 
 save('results.mat', 'res'); 
 
-%% Run Plot
+%% Show Plots
 
 Plots_compare
