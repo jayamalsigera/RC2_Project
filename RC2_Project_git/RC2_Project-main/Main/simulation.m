@@ -1,10 +1,10 @@
 %% Linear Trajectory Tracking Controller constants
-a = 3;  % >0
+a = 50;  % >0
 xi = 0.7;  % (0,1)
 
 %% Non linear Trajectory Tracking Controller constants
-b = 5;  % >0
-xi = 0.4;  % (0,1)
+b = 50;  % >0
+xi = 0.7;  % (0,1)
 
 %% Parking box pose
 x_box     = 850;
@@ -14,9 +14,6 @@ theta_box = 0;
 save('parking_box.mat', 'x_box', 'y_box', 'theta_box');
 
 %% Gains for posture regulation
-k1 = 5;
-%k2 = 1.5;  %GAINS DI DAVIDE
-k3 = 0.5;
 
 % Cartesian Regulation Gains
 Kv = 1;
@@ -24,9 +21,9 @@ Kw = 4;
 save("Cartesian_gains.mat", "Kv", "Kw");
 
 % Posture Regulation Gains
-% k1 = 0.5;
- k2 = 8;
-% k3 = 2;
+k1 = 5;
+k2 = 8;
+k3 = 1;
 save("Posture_gains.mat", "k1", "k2", "k3")
 
 %% Simulation Variables
@@ -47,7 +44,7 @@ t  = S.traj.t;                % [N x 1] [belongs to (0,1)]
 
 % simulation times
 shift_time = t(end);  % time traj2reg
-stop_time = t(end) + 10;  % stop simulation
+stop_time = t(end) + 5;  % stop simulation
 
 ref = timeseries(xy, t);      % ref.Data is Nx2: [x_d y_d]
 

@@ -87,7 +87,7 @@ function replay_q_timeseries_on_maze_pacman_real()
     hRobot = patch(ax, 0, 0, neonYellow, 'EdgeColor', 'none');
         
     velScale = 0.3;
-    hVel = quiver(ax, x(k0), y(k0), 0, 0, 0, 'Color', neonYellow, 'LineWidth', 2.5);
+    hVel = quiver(ax, x(k0), y(k0), 0, 0, 0, 'Color', neonYellow, 'LineWidth', 2.5, 'Visible', 'off');
     
     N = numel(x);
     timesteps = 5;

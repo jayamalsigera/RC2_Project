@@ -10,13 +10,16 @@ run('mazeGUI(scale)');
 uiwait(gcf);
 run('simulation.m');
 
+% gains parameters
+a = 15;
+xi = 0.706;
+b = 15;
+
 res = struct(); 
 
 %% Linear 
 
 model1 = "L_Trajectory_Tracking_and_Cartesian_Regulation";
-a = 5; xi = 0.706; % gains parameters
-
 load_system(model1);
 simOut1 = sim(model1, "StopTime", num2str(stop_time));
 
@@ -42,8 +45,6 @@ res.L.xi = xi;
 %% Linear 2
 
 model2 = "L_Trajectory_Tracking_and_Posture_Regulation";
-a= 20; xi = 0.4; % gains parameters
-
 load_system(model2);
 simOut2 = sim(model2, 'StopTime', num2str(stop_time));
 
@@ -70,8 +71,6 @@ res.L2.xi = xi;
 %% Non-Linear 
 
 model3 = "NL_Trajectory_Tracking_and_Cartesian_Regulation";
-b = 5; xi = 0.706;  % gains paramaters
-
 load_system(model3);
 simOut3 = sim(model3, 'StopTime', num2str(stop_time));
 
@@ -97,8 +96,6 @@ res.NL.xi = xi;
 %% Non-Linear 2
 
 model4 = "NL_Trajectory_Tracking_and_Posture_Regulation";
-b = 5; xi = 0.706; % gains parameters
-
 load_system(model4);
 simOut4 = sim(model4, 'StopTime', num2str(stop_time));
 
@@ -121,6 +118,10 @@ res.NL2.wd = simOut4.vd_wd.Data(:,2);
 res.NL2.b = b;
 res.NL2.xi = xi;
 
-%% 6. Save Data
+%% Save Data
 
 save('results.mat', 'res'); 
+
+%% Run Plot
+
+Plots_compare

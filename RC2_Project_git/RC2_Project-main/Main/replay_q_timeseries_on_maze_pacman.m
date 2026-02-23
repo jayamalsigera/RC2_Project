@@ -101,8 +101,9 @@ function replay_q_timeseries_on_maze_pacman()
     % [1 0.5 0.5] was used in "EdgeColor" as altnertnaive
         
     velScale = 0.3;
-    hVel = quiver(ax, x(k0), y(k0), 0, 0, 0, 'Color', neonRed, 'LineWidth', 2.5);
-    
+    hVel = quiver(ax, x(k0), y(k0), 0, 0, 0, 'Color', neonRed, 'LineWidth', 2.5, 'Visible', 'off');
+
+
     N = numel(x);
     timesteps = 5;
     trail_x = x(k0); trail_y = y(k0);

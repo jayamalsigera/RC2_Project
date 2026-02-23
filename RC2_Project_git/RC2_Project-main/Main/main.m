@@ -6,7 +6,7 @@
 clc, close all
 
 scale = 50;
-v_des = 50;
+v_des = 200;
 
 %% 1. Run draw.m and draw the required trajectory
 
@@ -33,4 +33,4 @@ simOut = sim(model);
 
 %% 5. Replay the saved data
 
-run('replay_q_timeseries_on_maze_pacman.m');
+run('replay_q_timeseries_on_maze_pacman_real.m');
