@@ -1,7 +1,7 @@
 %% Initialization
 
 Ts = 0.001;
-v_des = 200;
+v_des = 100;
 
 % Trajectory Tracking Gains Parameters
 load("Lin_Traj_params.mat")
@@ -15,7 +15,7 @@ load("Posture_gains.mat")
 load("parking_box.mat")
 
 % --- LOAD HERE THE TRAJECTORY ---
-S = load('trajectory_hard.mat');   % contains S.traj.xy and S.traj.t
+S = load('trajectory.mat');   % contains S.traj.xy and S.traj.t
 
 % unicycle initial conditions
 x0 = S.traj.xy(1,1);

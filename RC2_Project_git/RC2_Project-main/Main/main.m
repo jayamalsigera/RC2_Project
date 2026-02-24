@@ -6,7 +6,7 @@
 clc, close all
 
 scale = 50;
-v_des = 200;
+v_des = 100;
 
 %% 1. Run draw.m and draw the required trajectory
 

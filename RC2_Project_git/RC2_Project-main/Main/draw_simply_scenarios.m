@@ -27,7 +27,7 @@ function draw_simply_scenarios(scale, type, v_des)
         case 'circle'
             % CERCHIO: raggio 35% della mappa
             R = min(Hh, Wh) * 0.35;
-            theta = linspace(-pi, pi, 400)';
+            theta = linspace(-pi, pi, 100000)';
             xy = [cx + R*cos(theta), cy + R*sin(theta)];
             
         case 'square'
@@ -44,9 +44,9 @@ function draw_simply_scenarios(scale, type, v_des)
             % Interpolazione per avere 50 punti totali (100 per lato)
             xy = [];
             for i = 1:4
-                seg_x = linspace(pts(i,1), pts(i+1,1), 101)';
-                seg_y = linspace(pts(i,2), pts(i+1,2), 101)';
-                xy = [xy; [seg_x(1:100), seg_y(1:100)]];
+                seg_x = linspace(pts(i,1), pts(i+1,1), 10001)';
+                seg_y = linspace(pts(i,2), pts(i+1,2), 10001)';
+                xy = [xy; [seg_x(1:10000), seg_y(1:10000)]];
             end
             
         otherwise

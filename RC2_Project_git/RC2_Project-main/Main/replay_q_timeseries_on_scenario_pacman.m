@@ -1,4 +1,4 @@
-function replay_q_timeseries_on_scenario_pacman_real(type)
+function replay_q_timeseries_on_scenario_pacman(type)
     % Se non viene specificato il tipo, di default usa 'circle'
     if nargin < 1
         type = 'circle'; 

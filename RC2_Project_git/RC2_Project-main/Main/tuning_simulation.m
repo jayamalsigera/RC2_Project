@@ -1,12 +1,12 @@
 %% Linear Trajectory Tracking Controller constants
 
-a = 5;  % >0
-xi = 0.71;  % (0,1)
+a = 15;  % >0
+xi = 0.4;  % (0,1)
 
 %% Non linear Trajectory Tracking Controller constants
 
-b = 50;  % >0
-xi = 0.71;  % (0,1)
+b = 0.005;  % >0
+xi = 0.701;  % (0,1)
 
 %% Simulation Variables
 
@@ -14,7 +14,7 @@ xi = 0.71;  % (0,1)
 
 scale = 15;
 v_des = 50;
-type = 'circle';
+type = 'square';
 
 run('draw_simply_scenarios(scale, type, v_des)');
 uiwait(gcf);  % wait until figure is closed
@@ -30,8 +30,6 @@ theta0 = pi/4;
 xy = S.traj.xy;               % [N x 2]
 t  = S.traj.t;                % [N x 1] [belongs to (0,1)]
 
-%Tfinal = shift_time;           % seconds
-%t = t * Tfinal;
 
 shift_time = t(end);
 
@@ -47,8 +45,13 @@ model = 'NL_tuning';
 load_system(model);
 
 set_param(model, 'StopTime', num2str(shift_time));
-simOut = sim(model);
+sim(model);
 
 %% 5. Replay the saved data
 
 run('replay_q_timeseries_on_scenario_pacman(type)');
+
+
+%% Show plot
+
+Plots_scenario
