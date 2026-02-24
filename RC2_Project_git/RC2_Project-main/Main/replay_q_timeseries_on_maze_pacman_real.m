@@ -57,7 +57,7 @@ function replay_q_timeseries_on_maze_pacman_real()
           'LineWidth', 2, ...
           'LineStyle', '-');
     
-    % --- POINTS IN MAZE ---
+   % --- POINTS IN MAZE ---
     try scale = evalin('base', 'scale'); catch, scale = 50; end
     offset = scale / 2; margin = scale; 
     [Xg, Yg] = meshgrid((offset + margin) : scale : (Hh - offset - margin), ...
@@ -66,14 +66,34 @@ function replay_q_timeseries_on_maze_pacman_real()
     
     keep_initial = false(size(all_px));
     for i = 1:length(all_px)
-        c_idx = max(1, min(Hh, round(all_px(i))));
-        r_idx = max(1, min(Wh, round(all_py(i))));
-        if wallPlot(r_idx, c_idx) == 1, keep_initial(i) = true; end
+        px = all_px(i);
+        py = all_py(i);
+        
+        c_idx = max(1, min(Hh, round(px)));
+        r_idx = max(1, min(Wh, round(py)));
+        
+        if wallPlot(r_idx, c_idx) == 1
+            % --- ZONE DA ESCLUDERE ---
+            % Uso una tolleranza di +/- 5 per "catturare" esattamente i tuoi punti
+            
+            % 1) Zona Destra: x tra 1275 e 1475 (y attorno a 1025, 1075, 725, 775)
+            exclude_right = (px >= 1270 && px <= 1480) && ...
+                            ((py >= 1020 && py <= 1080) || (py >= 720 && py <= 780));
+                            
+            % 2) Zona Sinistra: x tra 75 e 275 (y attorno a 1075, 775, 725)
+            exclude_left = (px >= 70 && px <= 280) && ...
+                           ((py >= 1020 && py <= 1080) || (py >= 720 && py <= 780));
+            
+            % Se il punto non rientra nelle zone da escludere, lo teniamo
+            if ~exclude_right && ~exclude_left
+                keep_initial(i) = true; 
+            end
+        end
     end
     active_px = all_px(keep_initial); active_py = all_py(keep_initial);
     
     hPoints = plot(ax, active_px, active_py, 'o', ...
-        'MarkerSize', 4, 'MarkerEdgeColor', neonCyan, ...
+        'MarkerSize', 2, 'MarkerEdgeColor', neonCyan, ...
         'MarkerFaceColor', [0.7 0.9 1], 'LineWidth', 1);
     
     k0 = find(~bad, 1, 'first');
