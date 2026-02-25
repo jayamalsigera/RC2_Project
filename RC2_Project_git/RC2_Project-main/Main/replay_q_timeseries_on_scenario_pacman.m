@@ -1,7 +1,14 @@
-function replay_q_timeseries_on_scenario_pacman(type)
+function replay_q_timeseries_on_scenario_pacman(type, save_gif, gif_filename)
     % Se non viene specificato il tipo, di default usa 'circle'
     if nargin < 1
         type = 'circle'; 
+    end
+    % Impostazioni di default per la GIF
+    if nargin < 2
+        save_gif = false; 
+    end
+    if nargin < 3
+        gif_filename = 'pacman_animation.gif'; 
     end
     
     % Recupero variabili dal workspace principale
@@ -83,9 +90,15 @@ function replay_q_timeseries_on_scenario_pacman(type)
             rectangle(ax, 'Position', pos_in, 'Curvature', 0.15, 'EdgeColor', neonCyan, 'LineWidth', 2.5);
     end
     
-    % --- SETUP PUNTI DA "MANGIARE" ---
+   % --- SETUP PUNTI DA "MANGIARE" ---
     step = max(1, floor(size(xy,1) / 40));
-    idx = 1:step:size(xy,1);
+    
+    % Replicare la logica esatta del 'draw': la linea usa un passo doppio (meno punti)
+    if strcmpi(type, 'line')
+        idx = 1:step*2:size(xy,1);
+    else
+        idx = 1:step:size(xy,1);
+    end
     
     active_px = xy(idx,1);
     active_py = xy(idx,2);
@@ -116,7 +129,7 @@ function replay_q_timeseries_on_scenario_pacman(type)
     hVel = quiver(ax, x(k0), y(k0), 0, 0, 0, 'Color', neonYellow, 'LineWidth', 2.5, 'Visible', 'off');
     
     N = numel(x);
-    timesteps = 5; % Accelerazione del replay
+    timesteps = 50; % Accelerazione del replay
     
     trail_x = x(k0);
     trail_y = y(k0);
@@ -124,7 +137,9 @@ function replay_q_timeseries_on_scenario_pacman(type)
     % Raggio d'azione per mangiare i punti
     eat_radius_sq = radius^2; 
     
-    % --- CICLO DI ANIMAZIONE ---
+  % --- CICLO DI ANIMAZIONE ---
+    first_frame = true; % Flag necessario per inizializzare il file GIF
+    
     for k = k0:timesteps:N
         if ~ishandle(fig), return; end
         if bad(k), continue; end
@@ -135,26 +150,21 @@ function replay_q_timeseries_on_scenario_pacman(type)
         set(hTrail, 'XData', trail_x, 'YData', trail_y);
         
         % --- LOGICA BOCCA DINAMICA ---
-        % L'apertura oscilla in base al frame attuale 'k'
         m_open = 0.5 * abs(sin(k/10)); 
         angles = linspace(m_open, 2*pi - m_open, num_pts);
         
-        % Coordinate locali
         px_local = [0, radius * cos(angles)];
         py_local = [0, radius * sin(angles)];
         
-        % Rotazione in base a theta
         th = theta(k);
         R = [cos(th), -sin(th); sin(th), cos(th)];
         pts = (R * [px_local; py_local])';
         
-        % Traslazione sul punto attuale
         pts(:,1) = pts(:,1) + x(k);
         pts(:,2) = pts(:,2) + y(k);
         
         set(hRobot, 'XData', pts(:,1), 'YData', pts(:,2));
         
-        % Aggiorna vettore velocità
         if isfinite(vx(k)) && isfinite(vy(k))
             set(hVel, 'XData', x(k), 'YData', y(k), ...
                       'UData', velScale*vx(k), 'VData', velScale*vy(k));
@@ -172,6 +182,25 @@ function replay_q_timeseries_on_scenario_pacman(type)
             end
         end
         
+        % Forza l'aggiornamento grafico (tolto 'limitrate' per non saltare frame nella GIF)
         drawnow limitrate;
+        
+        % --- LOGICA SALVATAGGIO GIF ---
+        if save_gif
+            % Cattura il frame corrente
+            frame = getframe(fig);
+            im = frame2im(frame);
+            [imind, cm] = rgb2ind(im, 256);
+            
+            % Scrive il frame nel file
+            if first_frame
+                % Crea il file e imposta il loop infinito
+                imwrite(imind, cm, gif_filename, 'gif', 'Loopcount', inf, 'DelayTime', 0.05);
+                first_frame = false;
+            else
+                % Aggiunge i frame successivi al file esistente
+                imwrite(imind, cm, gif_filename, 'gif', 'WriteMode', 'append', 'DelayTime', 0.05);
+            end
+        end
     end
 end

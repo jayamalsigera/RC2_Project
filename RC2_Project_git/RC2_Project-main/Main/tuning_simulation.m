@@ -1,16 +1,5 @@
-%% Linear Trajectory Tracking Controller constants
-
-a = 15;  % >0
-xi = 0.4;  % (0,1)
-
-%% Non linear Trajectory Tracking Controller constants
-
-b = 0.005;  % >0
-xi = 0.701;  % (0,1)
-
 %% Simulation Variables
 
-%shift_time = 15;  % trajectory tracking time (before regulation)
 
 scale = 15;
 v_des = 50;
@@ -28,7 +17,7 @@ y0 = S.traj.xy(1,2);
 theta0 = pi/4;
 
 xy = S.traj.xy;               % [N x 2]
-t  = S.traj.t;                % [N x 1] [belongs to (0,1)]
+t  = S.traj.t;                % [N x 1]
 
 
 shift_time = t(end);
@@ -37,21 +26,56 @@ ref = timeseries(xy, t);      % ref.Data is Nx2: [x_d y_d]
 
 assignin('base','ref', ref);
 
-%% 4. Run Simulink Program and save results
+%% 4. Run First Simulink Program and save results
 
 Ts = 0.001;
-model = 'NL_tuning';
+model1 = 'L_tuning';
 
-load_system(model);
+% Linear Trajectory Tracking Controller constants
+a = 15;  % >0
+xi = 0.6;  % (0,1)
 
-set_param(model, 'StopTime', num2str(shift_time));
-sim(model);
+load_system(model1);
 
-%% 5. Replay the saved data
+set_param(model1, 'StopTime', num2str(shift_time));
+sim(model1);
 
-run('replay_q_timeseries_on_scenario_pacman(type)');
+L.t = tout;
+L.q = q.Data;
+L.vw = vw.Data;
+L.vd_wd = vd_wd.Data;
 
+
+%% Replay the saved data
+
+replay_q_timeseries_on_scenario_pacman(type, true, "Tuning_scenario/Square/Square_Lin_a15_xi06.gif");
+
+%% Run Second Simulink Program
+
+Ts = 0.001;
+model2 = 'NL_tuning';
+
+% Non linear Trajectory Tracking Controller constants
+
+b = 15;  % >0
+xi = 0.6;  % (0,1)
+
+
+load_system(model2);
+
+set_param(model2, 'StopTime', num2str(shift_time));
+sim(model2);
+
+NL.t = tout;
+NL.q = q.Data;
+NL.vw = vw.Data;
+NL.vd_wd = vd_wd.Data;
+
+%% Replay the saved data
+
+% Nota l'uso del backslash (o slash) per entrare nelle cartelle
+replay_q_timeseries_on_scenario_pacman(type, true, "Tuning_scenario/Square/Square_NonLin_b15_xi06.gif");
 
 %% Show plot
 
-Plots_scenario
+Plots_scenario_compare
