@@ -1,12 +1,12 @@
 %% Linear Trajectory Tracking Controller constants
-a = 50;  % >0
-xi = 0.7;  % (0,1)
+a = 15;  % >0
+xi = 0.6;  % (0,1)
 
 save("Lin_Traj_params", "a", "xi")
 
 %% Non linear Trajectory Tracking Controller constants
-b = 50;  % >0
-xi = 0.7;  % (0,1)
+b = 3;  % >0
+xi = 0.706;  % (0,1)
 
 save("NonLin_Traj_params", "b", "xi")
 

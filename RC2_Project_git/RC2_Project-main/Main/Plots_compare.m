@@ -38,7 +38,7 @@ subplot(2, 2, 2); hold on; grid on;
 plot(res.L.t(idx_L_traj), res.L.vd(idx_L_traj), '--', 'Color', "k", 'LineWidth', 1, 'DisplayName', 'v_d');
 plot(res.L.t(idx_L_traj), res.L.v(idx_L_traj), '-', 'Color', cL, 'LineWidth', 1.5, 'DisplayName', 'Linear v');
 plot(res.NL.t(idx_NL_traj), res.NL.v(idx_NL_traj), '-', 'Color', cNL, 'LineWidth', 1.5, 'DisplayName', 'Non-Linear v');
-title('Linear Velocity'); ylabel('v [cm/s]'); 
+title('Linear Velocity'); xlabel('Time [s]'); ylabel('v [cm/s]'); 
 xlim([0, shift_time]); % Limite bloccato alla fine del tracking
 lgd = legend('Location', 'best');
 lgd.ItemHitFcn = @(~, evt) set(evt.Peer, 'Visible', ~strcmp(evt.Peer.Visible, 'on'));

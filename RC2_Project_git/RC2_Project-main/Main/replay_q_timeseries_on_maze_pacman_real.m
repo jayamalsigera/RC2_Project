@@ -1,4 +1,12 @@
-function replay_q_timeseries_on_maze_pacman_real()
+function replay_q_timeseries_on_maze_pacman_real(save_gif, gif_filename)
+    % Impostazioni di default per la GIF
+    if nargin < 1
+        save_gif = false; 
+    end
+    if nargin < 2
+        gif_filename = 'pacman_maze_animation.gif'; 
+    end
+
     % Recupero variabili dal workspace
     q       = evalin('base','q');
     qdot    = evalin('base','qdot');
@@ -35,7 +43,7 @@ function replay_q_timeseries_on_maze_pacman_real()
     ymin = min([0; yf]) - pad;  ymax = max([Wh; yf]) + pad;
     
     % --- COLOURS SETUP ---
-    neonCyan  = [0 0.8 1];
+    neonCyan   = [0 0.8 1];
     neonYellow = [1 1 0]; % Giallo Pac-Man classico
     
     fig = figure('Name','Replay q(t) on Maze','Color','k');
@@ -74,17 +82,12 @@ function replay_q_timeseries_on_maze_pacman_real()
         
         if wallPlot(r_idx, c_idx) == 1
             % --- ZONE DA ESCLUDERE ---
-            % Uso una tolleranza di +/- 5 per "catturare" esattamente i tuoi punti
-            
-            % 1) Zona Destra: x tra 1275 e 1475 (y attorno a 1025, 1075, 725, 775)
             exclude_right = (px >= 1270 && px <= 1480) && ...
                             ((py >= 1020 && py <= 1080) || (py >= 720 && py <= 780));
                             
-            % 2) Zona Sinistra: x tra 75 e 275 (y attorno a 1075, 775, 725)
             exclude_left = (px >= 70 && px <= 280) && ...
                            ((py >= 1020 && py <= 1080) || (py >= 720 && py <= 780));
             
-            % Se il punto non rientra nelle zone da escludere, lo teniamo
             if ~exclude_right && ~exclude_left
                 keep_initial(i) = true; 
             end
@@ -110,32 +113,33 @@ function replay_q_timeseries_on_maze_pacman_real()
     hVel = quiver(ax, x(k0), y(k0), 0, 0, 0, 'Color', neonYellow, 'LineWidth', 2.5, 'Visible', 'off');
     
     N = numel(x);
-    timesteps = 5;
+    timesteps = 50;
     trail_x = x(k0); trail_y = y(k0);
     eat_radius_sq = (scale * 0.6)^2;
     
+    % --- CICLO DI ANIMAZIONE ---
+    first_frame = true; % Flag per l'inizializzazione del file GIF
+    
     for k = k0:timesteps:N
+        % Controllo iniziale di sicurezza
         if ~ishandle(fig), return; end
+        
         if bad(k), continue; end
         
         trail_x = [trail_x; x(k)]; trail_y = [trail_y; y(k)];
         set(hTrail, 'XData', trail_x, 'YData', trail_y);
         
         % --- LOGICA BOCCA DINAMICA ---
-        % L'apertura oscilla tra 0 e 0.5 radianti
         m_open = 0.5 * abs(sin(k/10)); 
         angles = linspace(m_open, 2*pi - m_open, num_pts);
         
-        % Coordinate locali (cerchio con fetta mancante)
-        px = [0, radius * cos(angles)];
-        py = [0, radius * sin(angles)];
+        px_local = [0, radius * cos(angles)];
+        py_local = [0, radius * sin(angles)];
         
-        % Rotazione basata su theta (orientamento robot)
         th = theta(k);
         R = [cos(th), -sin(th); sin(th), cos(th)];
-        pts = (R * [px; py])';
+        pts = (R * [px_local; py_local])';
         
-        % Traslazione
         pts(:,1) = pts(:,1) + x(k);
         pts(:,2) = pts(:,2) + y(k);
         
@@ -156,6 +160,39 @@ function replay_q_timeseries_on_maze_pacman_real()
                 set(hPoints, 'XData', active_px, 'YData', active_py);
             end
         end
-        drawnow limitrate;
+        
+        % Forza l'aggiornamento grafico
+        drawnow; 
+        
+        % --- CONTROLLO CHIUSURA FINESTRA ---
+        % Se chiudi la finestra a metà esecuzione, intercettiamo l'evento in modo pulito
+        if ~ishandle(fig)
+            if save_gif
+                fprintf('Finestra chiusa in anticipo. La GIF è stata salvata correttamente fino a questo momento in: %s\n', gif_filename);
+            end
+            return;
+        end
+        
+        % --- LOGICA SALVATAGGIO GIF ---
+        if save_gif
+            % Cattura il frame corrente (qui siamo sicuri che 'fig' esista ancora)
+            frame = getframe(fig);
+            im = frame2im(frame);
+            [imind, cm] = rgb2ind(im, 256);
+            
+            % Scrive il frame nel file
+            if first_frame
+                % Crea il file e imposta il loop infinito
+                imwrite(imind, cm, gif_filename, 'gif', 'Loopcount', inf, 'DelayTime', 0.05);
+                first_frame = false;
+            else
+                % Aggiunge i frame successivi al file esistente
+                imwrite(imind, cm, gif_filename, 'gif', 'WriteMode', 'append', 'DelayTime', 0.05);
+            end
+        end
+    end
+    
+    if save_gif
+        fprintf('Animazione completata! GIF salvata in: %s\n', gif_filename);
     end
 end
